@@ -1,0 +1,56 @@
+name: Generate sheets with fal.ai
+
+on:
+  workflow_dispatch:
+    inputs:
+      sheet:
+        description: "生成するシート番号 (1-3)。空なら3枚すべて"
+        required: false
+        default: ""
+      model:
+        description: "falモデルID"
+        required: false
+        default: "fal-ai/flux/dev"
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate sheets
+        env:
+          FAL_KEY: ${{ secrets.FAL_KEY }}
+        run: |
+          if [ -z "$FAL_KEY" ]; then
+            echo "::error::リポジトリシークレット FAL_KEY を設定してください (Settings > Secrets and variables > Actions)"
+            exit 1
+          fi
+          ARGS="--model '${{ inputs.model }}'"
+          if [ -n "${{ inputs.sheet }}" ]; then ARGS="$ARGS --sheet ${{ inputs.sheet }}"; fi
+          eval python3 scripts/generate_sheets.py $ARGS
+
+      - name: Commit and push sheets
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add sheets/
+          if git diff --cached --quiet; then
+            echo "変更なし"
+          else
+            git commit -m "fal.aiでシート画像を生成 (workflow run ${{ github.run_id }})"
+            git push
+          fi
+
+      - name: Upload sheets as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sheets
+          path: sheets/*.png
