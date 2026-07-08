@@ -1,0 +1,46 @@
+{
+  "title": "空の狐と地上のウサギ 20pシート生成・読書仕様",
+  "sheet_format": {
+    "unit": "sheet",
+    "pages_per_sheet": 20,
+    "grid": { "cols": 5, "rows": 4 },
+    "page_order_on_sheet": "rtl_row_major",
+    "page_order_note": "1p=シート右上。右→左に1〜5p、次の行の右端が6p…20p=左下",
+    "page_spec": {
+      "panels_per_page": 3,
+      "panel_ratio": "16:9",
+      "page_ratio": "672:1180 (16:9パネル×3縦積み+余白)"
+    },
+    "sheet_pixel_targets": {
+      "ideal": "6720x4720 (1ページ=1344x1180)",
+      "practical": "3360x2360 (1ページ=672x590) ※生成上限内。セリフ文字は判読限界",
+      "warning": "1シート生成では1ページあたりの解像度が単ページ生成の1/20になる。セリフは画像に焼き込まず、dialogue JSONからリーダー側でオーバーレイ描画する方式を推奨"
+    },
+    "gutter": {
+      "px": 0,
+      "note": "格子ズレ対策で余白ゼロ・均等5x4分割を厳守させる。プロンプトに 'strict 5x4 uniform grid, no gutter, no border' を含める"
+    },
+    "naming": "sheet_{chapter}_{nn}.png (例: sheet_ch10_01.png = 第十章 1〜20p)"
+  },
+  "generation_prompt_template": {
+    "prefix": "manga page sheet, strict uniform 5 columns x 4 rows grid of 20 vertical manga pages, each page contains 3 stacked 16:9 panels, no gutter, no page borders overlapping, read right to left",
+    "per_page": "{page_no}: {panel prompts x3 ※characters.jsonのanchor_promptを展開}",
+    "suffix": "anime screencap, cinematic lighting, cel shading, detailed background",
+    "identity_check": [
+      "kon: 左耳の折れが全出現カットで維持されているか(小サイズで最も消えやすい)",
+      "garen: 懐中時計の鎖",
+      "oto: 星型ハイライト(喪失シーンでは意図的に無し)",
+      "uka: 白マフラー・赤い頬のヒゲ模様"
+    ]
+  },
+  "reader": {
+    "input": "シート画像を章の順にまとめて選択(1枚=20p)",
+    "view_modes": {
+      "spread": "2p見開き(右=奇数p、左=偶数p)。デフォルト",
+      "single": "1pずつ",
+      "sheet": "20p一覧(検品・ナビ用)"
+    },
+    "navigation": "右開き: 左タップ・←キー・右スワイプで次へ。一覧のセルをタップでそのページへジャンプ",
+    "crop_rule": "page n → col=(4-((n-1)%5)), row=floor((n-1)/5) をシートから等分クロップ"
+  }
+}

@@ -1,0 +1,269 @@
+{
+  "title": "おむかえのお願い(めばえ保育園怪談・読切48p)シート版ネーム",
+  "format": {
+    "unit": "sheet",
+    "pages_per_sheet": 20,
+    "grid": { "cols": 5, "rows": 4 },
+    "page_order_on_sheet": "rtl_row_major(1p=シート右上、右→左、行送り)",
+    "panels_per_page": "可変(1〜4)。ページ内は縦積み、上から読む",
+    "style_suffix": "realistic seinen manga art, monochrome ink, extreme chiaroscuro, heavy cross-hatching, deep blacks, cinematic film-still composition",
+    "sheets_total": 3,
+    "note": "シート3は8ページ+空白12セル(黒ベタで埋める)。セリフはリーダー側オーバーレイ推奨(dialogue参照)。{char}はomukae_characters.jsonのanchor_promptを展開"
+  },
+  "motif_legend": {
+    "EAR": "耳を際立たせるコマ(怪異側)",
+    "MOUTH": "リアルな口元のクローズアップ(呼ぶ側)"
+  },
+  "sheets": [
+    {
+      "sheet": 1,
+      "pages_range": "P1-P20",
+      "pages": [
+        {"page": 1, "scene": "扉", "panels": [
+          {"no": 1, "chars": ["kaii"], "motif": "EAR", "prompt": "full page title: nursery school corridor at dusk, blinding orange backlight through far window, rows of children's shoe cubbies in deep shadow, silhouettes of several mothers standing in the corridor all murmuring, among the silhouettes one pair of ears rendered unnaturally sharp, cinematic wide shot, heavy hatching in shadows", "dialogue": [{"speaker": "タイトル", "text": "おむかえのお願い", "type": "title"}, {"speaker": "紙面", "text": "◆17時以降は、お子さまのお名前をフルネームで3回お呼びください", "type": "caption_small"}], "sfx": null}
+        ]},
+        {"page": 2, "scene": "N氏・取材", "panels": [
+          {"no": 1, "chars": ["n_shi"], "prompt": "cafe interior, {n_shi} sipping coffee, hard window light cutting his face in half, film still framing", "dialogue": [{"speaker": "N氏", "text": "いやー、最初はいたずらだと思ったんですよね", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "extreme close-up of brown envelope on table, postmark 'Osaka S-city', no sender, single hard light, hatched shadow", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["n_shi"], "prompt": "hands unfolding a photocopied sheet, paper catching the light, everything else falling into black", "dialogue": [], "sfx": "カサ…"}
+        ]},
+        {"page": 3, "scene": "園だより", "panels": [
+          {"no": 1, "chars": [], "prompt": "full-bleed insert: newsletter page 'ENDAYORI' facsimile, mundane hydrangea illustration, realistic print texture", "dialogue": [{"speaker": "紙面", "text": "園だより", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": ["n_shi"], "prompt": "close-up of {n_shi} eyes only, top half of face, reading light from below", "dialogue": [{"speaker": "N氏", "text": "普通のおたよりだなって。でも…変なんですよ、ところどころ", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "the same newsletter but one paragraph falls under a shadow as if something leans over it, hatching thickening around the text", "dialogue": [{"speaker": "N氏", "text": "お願いが、書いてあるんです。毎回", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 4, "scene": "消えた資料", "panels": [
+          {"no": 1, "chars": ["n_shi"], "prompt": "{n_shi} opening archive shelf in dim office, flashlight-like single source", "dialogue": [{"speaker": "N氏", "text": "\"ほ\"の棚に保管して…", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "empty file folder, a dust-free rectangle where papers used to be, macro shot", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["n_shi"], "prompt": "close-up {n_shi} face, the smile gone for the first time, hard side light, hatched cheek", "dialogue": [{"speaker": "N氏", "text": "…なくなってた。ここまでにしておいてください。俺が知ってるのはこれだけです", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 5, "scene": "N氏と別れ", "panels": [
+          {"no": 1, "chars": ["n_shi"], "prompt": "{n_shi} waving at street corner at dusk, long shot, long shadow", "dialogue": [{"speaker": "N氏", "text": "来週、取材行ってきますよ", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "pure white panel, single line of text only", "dialogue": [{"speaker": "ナレーション", "text": "その後、彼とは連絡が取れていない。", "type": "narration"}], "sfx": null},
+          {"no": 3, "chars": ["narrator"], "prompt": "{narrator} from behind, spreading documents on desk, desk lamp the only light, face never shown", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 6, "scene": "資料一覧", "panels": [
+          {"no": 1, "chars": [], "prompt": "top-down cinematic still: newsletter, renrakucho notebooks, minutes, cassette tape arranged on dark desk, lamp light pooling, heavy hatched vignette", "dialogue": [{"speaker": "ナレーション", "text": "残されたのは、断片的な資料と、三名の保護者の証言だけである", "type": "narration"}, {"speaker": "ナレーション", "text": "※木下さんという一家とは、現在も連絡が取れていない", "type": "caption_small"}, {"speaker": "ナレーション", "text": "※最後まで読んだ方は、巻末の確認事項に必ずお答えいただきたい", "type": "caption_small"}], "sfx": null}
+        ]},
+        {"page": 7, "scene": "資料1・6月号", "panels": [
+          {"no": 1, "chars": [], "prompt": "full page facsimile of June newsletter, hydrangea cut, mini tomato article, lower section in different typeface catching a colder light", "dialogue": [{"speaker": "紙面", "text": "◆17時以降におむかえに来られる保護者さまは、必ずお子さまのお名前をフルネームで3回お呼びになってから、お連れ帰りください", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 8, "scene": "保護者A登場", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "cafe, {hogosha_a} showing phone photo of her son, natural window light, realistic hands", "dialogue": [{"speaker": "A", "text": "変だなとは思いました。3回も名前呼ぶんですよ?(笑)", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["hogosha_a", "yuma"], "motif": "MOUTH", "prompt": "flashback: classroom doorway, extreme close-up of {hogosha_a} mouth only, lips forming the name, realistic lip texture", "dialogue": [{"speaker": "A", "text": "悠真、悠真、悠真", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["yuma"], "prompt": "{yuma} laughing and running toward camera, warm daylight, the one bright panel of the chapter", "dialogue": [{"speaker": "悠真", "text": "なにー?", "type": "normal"}, {"speaker": "A", "text": "これはこれでいいな、って", "type": "narration"}], "sfx": null}
+        ]},
+        {"page": 9, "scene": "お経みたい", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "present, {hogosha_a} lowering her eyes", "dialogue": [{"speaker": "A", "text": "でも…いま思えば、あれが不気味やった", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "motif": "MOUTH", "prompt": "large flashback panel: evening corridor in orange backlight, parents standing at even intervals each facing a child, counting on fingers, a row of realistic mouths all mid-syllable, overlapping speech balloons echoing down the corridor, hatched orange-to-black gradient", "dialogue": [{"speaker": "保護者たち", "text": "――ちゃん、――ちゃん、――ちゃん", "type": "echo"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_a"], "prompt": "close-up {hogosha_a} present day", "dialogue": [{"speaker": "A", "text": "お経みたいでした", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 10, "scene": "西門と桜", "panels": [
+          {"no": 1, "chars": [], "prompt": "hand-drawn site map: south main gate, northwest west gate, cemetery across the road, one large tree, documentary style", "dialogue": [{"speaker": "A", "text": "西門の外に、桜の大きい木があって", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "large panel: colossal cherry tree in full bloom rendered entirely in monochrome hatching, roots heaving up the asphalt, nobody under it, blossoms white against a black hatched sky, cinematic low angle", "dialogue": [{"speaker": "A", "text": "誰に言われたわけでもないのに、みんな避けてました", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 11, "scene": "せんせーい", "panels": [
+          {"no": 1, "chars": ["hogosha_a", "yuma"], "prompt": "flashback: {hogosha_a} carrying 2-year-old {yuma} out the west gate at dusk, long shadows", "dialogue": [], "sfx": null},
+          {"no": 2, "chars": ["yuma"], "prompt": "{yuma} pointing at the tree, delighted", "dialogue": [{"speaker": "悠真", "text": "せんせーい!せんせーい!", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["kaii"], "motif": "EAR", "prompt": "her POV: under the tree, half-darkness, apparently nobody — but in the hatching at the trunk's shadow a faint outline, only the silhouette of ears drawn one line sharper than everything around it, must survive a second look", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 12, "scene": "おっきいせんせい", "panels": [
+          {"no": 1, "chars": ["yuma"], "prompt": "large panel: extreme close-up of {yuma} innocent face pointing straight at camera, solid black background, single hard light, hatched edge of the light", "dialogue": [{"speaker": "悠真", "text": "おっきい、せんせい", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 13, "scene": "考えたら負け", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "present, {hogosha_a} eyes down", "dialogue": [{"speaker": "A", "text": "それ以来、西門は使わんようになりました", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["hogosha_a"], "motif": "MOUTH", "prompt": "close-up of her mouth only, lips pressed, dry", "dialogue": [{"speaker": "A", "text": "子どもを毎日預ける場所のこと、深く考えたら負けなんです。考え出したら、預けられへんようになるから", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "white panel, tiny text", "dialogue": [{"speaker": "A", "text": "仕事、辞められへんし", "type": "caption_small"}], "sfx": null}
+        ]},
+        {"page": 14, "scene": "資料2・連絡帳", "panels": [
+          {"no": 1, "chars": [], "prompt": "facsimile of renrakucho notebook spread, handwriting, the final sentence of the school's reply drifting slightly off the ruled lines, macro paper texture", "dialogue": [{"speaker": "木下(保護者欄)", "text": "3回呼ぶのは防犯ですか?ゆあに『ママ、はやく』と急かされて…", "type": "document"}, {"speaker": "園(園欄)", "text": "お名前をお呼びいただくのは、お子さまのためです。(略)指を折りながらお呼びになることをおすすめいたします", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 15, "scene": "保護者B登場", "panels": [
+          {"no": 1, "chars": ["hogosha_b"], "prompt": "family restaurant booth, {hogosha_b} under flat fluorescent light, documentary framing", "dialogue": [{"speaker": "B", "text": "あの園、18時を過ぎると空気が変わるんです", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "flashback: every light in the nursery blazing including unused classrooms, building glowing against black hatched night, wide establishing shot", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["sensei"], "prompt": "diagram-like still: teachers posted at entrance, playroom door, corridor corner like sentries, high angle", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 16, "scene": "先生は呼ばない", "panels": [
+          {"no": 1, "chars": ["hogosha_b"], "motif": "MOUTH", "prompt": "{hogosha_b} at entrance calling the full name, embarrassed, close on his realistic mouth mid-call", "dialogue": [{"speaker": "B", "text": "○○ゆり、○○ゆり…", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["yuri"], "prompt": "{yuri} absorbed in play, not turning around, seen from behind", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["sensei"], "prompt": "{sensei} straight face, flat frontal light like an ID photo", "dialogue": [{"speaker": "B", "text": "先生が絶対に、代わりに呼ばへんのですよ", "type": "narration"}, {"speaker": "先生", "text": "もう一度、最初からお願いします", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 17, "scene": "意味がない", "panels": [
+          {"no": 1, "chars": ["hogosha_b", "sensei"], "prompt": "{hogosha_b} whispering to veteran teacher in corridor, conspiratorial two shot", "dialogue": [{"speaker": "B", "text": "なんで先生が呼んだらあかんのですか", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["sensei"], "prompt": "{sensei} glancing around, half her face in hatched shadow", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["sensei"], "motif": "MOUTH", "prompt": "extreme close-up of the teacher's mouth whispering, then pulling into a professional smile, the smile drawn realistic and joyless", "dialogue": [{"speaker": "先生", "text": "呼ぶのは、迎えに来た人やないと、意味がないんです", "type": "whisper"}], "sfx": null}
+        ]},
+        {"page": 18, "scene": "雨の日・ゆあ", "panels": [
+          {"no": 1, "chars": [], "prompt": "flashback: late June, heavy rain on playroom windows at dusk, interior lit, outside pure hatched black", "dialogue": [], "sfx": "ザァァ…"},
+          {"no": 2, "chars": ["yua"], "motif": "EAR", "prompt": "{yua} standing at the window looking out, her ear clearly visible through the straight bob hair, rim light on the ear edge only", "dialogue": [{"speaker": "ゆあ", "text": "ゆあのママ、きた", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_b"], "prompt": "his POV out the window: gate lamp circle of light, only rain inside it, nobody, heavy vertical hatching of rain", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 19, "scene": "かっこうしてるだけ", "panels": [
+          {"no": 1, "chars": ["yua", "kaii"], "motif": "EAR", "prompt": "large panel: {yua} pressing her face to the glass, breath fog on the window, her ear sharp against the hair; outside, just beyond the edge of the gate lamp's circle, a tiny umbrella-holding human silhouette, its ears the only crisply drawn detail, everything else dissolving into rain hatching", "dialogue": [{"speaker": "ゆあ", "text": "ちがうわ。", "type": "normal"}, {"speaker": "ゆあ", "text": "ゆあのママの、かっこうしてるだけや", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 20, "scene": "三十分後", "panels": [
+          {"no": 1, "chars": ["hogosha_b"], "prompt": "present, {hogosha_b} gripping his glass", "dialogue": [{"speaker": "B", "text": "ぞわっとしました。でも五歳の子の言うことでしょう", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["hogosha_b"], "prompt": "same shot, slightly closer", "dialogue": [{"speaker": "B", "text": "三十分後に、木下さん——本物の、やと思います——が迎えに来た", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "white panel", "dialogue": [{"speaker": "ナレーション", "text": "その日から、ゆあちゃんは窓の外を見なくなったそうです", "type": "narration"}], "sfx": null}
+        ]}
+      ]
+    },
+    {
+      "sheet": 2,
+      "pages_range": "P21-P40",
+      "pages": [
+        {"page": 21, "scene": "資料3・7月号", "panels": [
+          {"no": 1, "chars": [], "prompt": "full page facsimile of July newsletter: pool article on top, then a growing bulleted list, line spacing tightening toward the bottom, the paper itself seeming to darken with hatching toward the last rule", "dialogue": [{"speaker": "紙面", "text": "・3回とも振り向いたことをご確認ください ・振り向かなかった場合は数え直してください ・振り向いた回数を本人にお尋ねにならないでください ・お子さまから先にお名前を呼ばれた場合は、お返事をなさらず職員へ ・西門は17時に施錠します", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 22, "scene": "LINEが荒れる", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "present, {hogosha_a}", "dialogue": [{"speaker": "A", "text": "あれが出たとき、さすがにざわつきました", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "smartphone screen glowing in a dark room, group chat scrolling, the phone the only light source, hatched hand holding it", "dialogue": [{"speaker": "LINE", "text": "実はうちも変なことがあった", "type": "document"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "speech balloons overflowing beyond the phone screen edges into the black of the panel, typographic horror", "dialogue": [{"speaker": "LINE", "text": "同時に返事が聞こえた/家まで一言もしゃべらない日がある", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 23, "scene": "消えたグループ", "panels": [
+          {"no": 1, "chars": [], "prompt": "close-up of one chat message on screen, macro pixels", "dialogue": [{"speaker": "LINE", "text": "寝てる子が、目をつぶったまま、まばたきした", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "the same thread, dozens of replies all reading the same hedge, uncanny repetition", "dialogue": [{"speaker": "LINE", "text": "見間違いやと思うけど(×約30件)", "type": "document"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_a"], "prompt": "next morning, phone showing 'トークが見つかりません', daylight suddenly flat and gray", "dialogue": [{"speaker": "A", "text": "誰も消してへんのに", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 24, "scene": "夕立・三回目", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "motif": "MOUTH", "prompt": "flashback: torrential rain, {hogosha_a} with umbrella and bags at the entrance, close on her mouth mid-name, rain streaking the light", "dialogue": [{"speaker": "A", "text": "――悠真、――悠真…", "type": "normal"}], "sfx": "ザーッ"},
+          {"no": 2, "chars": ["hogosha_a"], "prompt": "her phone ringing mid-third-call, she answers by reflex, umbrella pinned by shoulder", "dialogue": [], "sfx": "ヴヴッ"},
+          {"no": 3, "chars": ["hogosha_a", "yuma"], "prompt": "montage: phone at ear, putting shoes on the boy, taking his hand, walking to bike shelter, all in one hatched rainy long shot", "dialogue": [], "sfx": null},
+          {"no": 4, "chars": ["hogosha_a"], "prompt": "she hangs up, blood draining from her face, close-up, rain on skin rendered in fine hatching", "dialogue": [{"speaker": "A", "text": "私…三回目、言うたっけ?", "type": "thought"}], "sfx": null}
+        ]},
+        {"page": 25, "scene": "いつも通り", "panels": [
+          {"no": 1, "chars": ["yuma"], "motif": "EAR", "prompt": "child seat on the back of the bicycle, {yuma} in raincoat chattering, hood shadowing the face, only the ear catching the streetlight inside the hood", "dialogue": [], "sfx": null},
+          {"no": 2, "chars": ["hogosha_a"], "prompt": "her back pedaling in the rain", "dialogue": [{"speaker": "A", "text": "いつも通り、て何やろ。私、この子のいつも通りを、全部知ってるんかな", "type": "thought"}], "sfx": null},
+          {"no": 3, "chars": ["yuma"], "motif": "EAR", "prompt": "stopped at a red light, from inside the hood, voice; the hood interior pure black hatching except the rim of a small ear", "dialogue": [{"speaker": "悠真?", "text": "ママ", "type": "normal"}], "sfx": null},
+          {"no": 4, "chars": ["hogosha_a"], "prompt": "extreme close-up of her eye, the newsletter line flashing over it", "dialogue": [{"speaker": "紙面(フラッシュ)", "text": "お返事をなさらず——", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 26, "scene": "ママ、ママ", "panels": [
+          {"no": 1, "chars": ["yuma"], "motif": "EAR", "prompt": "tall vertical panel: the voice from behind, second time, the hooded ear again, rain hatching vertical", "dialogue": [{"speaker": "悠真?", "text": "ママ", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["yuma"], "motif": "EAR", "prompt": "tall vertical panel: third time, identical framing, one line closer", "dialogue": [{"speaker": "悠真?", "text": "ママ", "type": "normal"}, {"speaker": "A", "text": "声はどう聞いても悠真。重みもちゃんとある。でも、何かが違う気がする", "type": "thought"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_a"], "prompt": "green light; her back pedaling off without answering, wide cinematic shot, wet asphalt reflecting the signal as pure white against hatched black", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 27, "scene": "玄関", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "home entryway, she flicks the light on and turns around, the bulb a harsh bare point", "dialogue": [], "sfx": "パチッ"},
+          {"no": 2, "chars": ["yuma"], "prompt": "large panel: {yuma} in tears, fully lit, utterly human, realistic crying face", "dialogue": [{"speaker": "悠真", "text": "ママ、なんで無視すんの", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_a", "yuma"], "prompt": "she crushes him into a hug, faces hidden", "dialogue": [{"speaker": "A", "text": "ごめん、ごめん、ほんまにごめん", "type": "normal"}], "sfx": null},
+          {"no": 4, "chars": ["hogosha_a"], "prompt": "present day", "dialogue": [{"speaker": "A", "text": "私が自分の子を疑って泣かせただけの話なら、それでええんです", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 28, "scene": "誰が数えてた", "panels": [
+          {"no": 1, "chars": [], "prompt": "macro of next day's renrakucho, teacher's neat handwriting", "dialogue": [{"speaker": "担任(連絡帳)", "text": "昨日は、お電話のあと、きちんと三回お呼びいただけていたので、ご安心ください。", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": ["hogosha_a"], "prompt": "her face freezing, close-up, light from the notebook page reflecting up", "dialogue": [{"speaker": "A", "text": "電話のこと、言うてません。玄関に先生は、誰も", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "white panel, one line", "dialogue": [{"speaker": "A", "text": "…誰が、数えててくれたんでしょうね", "type": "narration"}], "sfx": null}
+        ]},
+        {"page": 29, "scene": "資料4/古老C", "panels": [
+          {"no": 1, "chars": [], "prompt": "facsimile: parent's guilty note and the school's reply, the reply's key phrase set in slightly heavier ink", "dialogue": [{"speaker": "保護者欄", "text": "2回しか呼ばずに連れて帰ってしまいました", "type": "document"}, {"speaker": "園欄", "text": "ゆあちゃんは本日も、いつも通り、園に登園しております", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": ["kourou_c"], "prompt": "butsuma tatami room, {kourou_c} beside a butsudan, one shaft of afternoon light, she points at the recorder, wrinkles in dense cross-hatching", "dialogue": [{"speaker": "C", "text": "その機械に、私の声以外が入っとっても、消さんといてな", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 30, "scene": "桜と三回", "panels": [
+          {"no": 1, "chars": ["kourou_c"], "prompt": "{kourou_c} pouring tea, steam in the light shaft", "dialogue": [{"speaker": "C", "text": "あの桜はね、誰の土地でもない。道の上に生えてるんです", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["kourou_c"], "prompt": "her hands only, resting", "dialogue": [{"speaker": "C", "text": "一回だけ切る話が出て…業者が下見に来た日に、いろいろあって、流れました", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["kourou_c"], "prompt": "close-up, eyes toward the garden", "dialogue": [{"speaker": "C", "text": "『三回』は昔からあります。決まりやのうて、しつけ話でした", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 31, "scene": "伝承(見開き相当)", "panels": [
+          {"no": 1, "chars": ["kaii"], "motif": "EAR", "prompt": "full page sumi-e style: country road at oumagatoki twilight, children playing, far in the thin darkness a calling figure drawn as outline only — except its ears, sharply inked, subtly too high on the head; the entire scene in brush-and-hatch monochrome, cinematic ultra-wide", "dialogue": [{"speaker": "ナレーション", "text": "一回振り向いたら、顔を見られる", "type": "narration"}, {"speaker": "ナレーション", "text": "二回振り向いたら、声を覚えられる", "type": "narration"}, {"speaker": "ナレーション", "text": "三回振り向いたら——名前を、渡してしもたことになる", "type": "narration"}, {"speaker": "ナレーション", "text": "名前を渡したら、あとはもう、入れ替わるだけ", "type": "narration"}], "sfx": null}
+        ]},
+        {"page": 32, "scene": "名前は呼んだもんのもん", "panels": [
+          {"no": 1, "chars": ["kourou_c"], "motif": "MOUTH", "prompt": "close-up of the elder's mouth, aged lips, mid-speech, hatched wrinkles radiating", "dialogue": [{"speaker": "C", "text": "せやから、親の方が\"先に\"三回呼ぶんです。名前は、呼んだもんのもん。親が先に三回呼んだら、その日その子の名前は親のもんです", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["kourou_c"], "prompt": "she reads the notebook photocopy, long silence, removes her glasses", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["kourou_c"], "prompt": "macro: her hand turning the photocopy face down on the low table, deliberate", "dialogue": [{"speaker": "C", "text": "この園の返事はね、嘘は一個も書いてないんです", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 33, "scene": "書いてへんこと", "panels": [
+          {"no": 1, "chars": ["kourou_c"], "prompt": "{kourou_c} looking at camera-side", "dialogue": [{"speaker": "C", "text": "書いてあることやのうて、書いてへんことを、読むんです", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "the renrakucho reply again, but the blank space where 'the child at home' should be mentioned glows white against hatching pressing in from all sides", "dialogue": [{"speaker": "C", "text": "この園は、園におる子のことしか、書けへんのです", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "silent panel: the light shaft in the tatami room, dust motes, nobody in frame", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 34, "scene": "数えられへん", "panels": [
+          {"no": 1, "chars": ["kourou_c"], "prompt": "{kourou_c} quoting the former principal, her face half-shadowed", "dialogue": [{"speaker": "C(先代園長の言)", "text": "暗い教室いうんはね、奥さん、数えられへんのですわ", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["kaii"], "motif": "EAR", "prompt": "flashback thirty years: dusk playroom window seen from outside, four — five children's faces looking out, one silhouette among them with ears drawn a hair too sharp and too high, hatched dusk", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["kourou_c"], "prompt": "{kourou_c} closing her mouth mid-sentence, refusing to continue", "dialogue": [{"speaker": "C", "text": "在園児の顔は全部わかります。わかるはずなんですが…", "type": "normal"}], "sfx": null},
+          {"no": 4, "chars": [], "prompt": "back view of the former principal, decades ago, corridor", "dialogue": [{"speaker": "先代園長", "text": "数え間違えたお家では、昔のアルバムだけは、開かん方がよろしい", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 35, "scene": "資料5・保護者会", "panels": [
+          {"no": 1, "chars": [], "prompt": "minutes facsimile, the phrase 'For safety' appearing three times, official document texture", "dialogue": [{"speaker": "議事録", "text": "園長「安全のためです」(発言三回)", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": ["kinoshita_haha"], "prompt": "meeting room, {kinoshita_haha} standing up from folding chair, fluorescent light flat and merciless, cinematic wide with rows of parents' backs", "dialogue": [{"speaker": "木下", "text": "うちの子は毎日家にいるのに、『園に登園しています』とはどういうことか!", "type": "shout"}], "sfx": null},
+          {"no": 3, "chars": ["encho"], "prompt": "{encho} silent, raising one hand to stop the deputy's whisper, face in shadow", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 36, "scene": "園長の言葉", "panels": [
+          {"no": 1, "chars": ["encho"], "motif": "MOUTH", "prompt": "large panel: {encho} backlit at the podium, entire figure a silhouette except the mouth, lit and rendered in full realism, mid-sentence", "dialogue": [{"speaker": "園長", "text": "名前を呼ばれて3回振り向けるのは、その名前をほんとうに持っている者だけです", "type": "normal"}, {"speaker": "園長", "text": "お帰りになったら、ゆあちゃんの目を見て、フルネームで、3回", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["kinoshita_haha"], "prompt": "the hall stirring, {kinoshita_haha} shaking", "dialogue": [{"speaker": "木下", "text": "ふざけるな", "type": "normal"}], "sfx": "ざわ…"}
+        ]},
+        {"page": 37, "scene": "門灯の下(山場)", "panels": [
+          {"no": 1, "chars": ["kinoshita_haha", "yua"], "prompt": "after the meeting, under the gate lamp: {kinoshita_haha} crouching, gripping her daughter's shoulders, the lamp a hard cone of light in hatched darkness, film noir staging", "dialogue": [], "sfx": null},
+          {"no": 2, "chars": ["kinoshita_haha"], "motif": "MOUTH", "prompt": "extreme close-up of the mother's mouth: cracked lips, spit, teeth, forming the name with everything she has", "dialogue": [{"speaker": "木下", "text": "木下ゆあ。木下ゆあ。木下ゆあ", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["yua"], "motif": "EAR", "prompt": "{yua} not turning: shoulders held, only her face rotating toward the lamp light, her ear toward her mother rendered razor sharp, listening", "dialogue": [], "sfx": null},
+          {"no": 4, "chars": ["yua"], "motif": "EAR", "prompt": "with each call her head shifts a few degrees further to an angle where eyes can never meet, three-position sequence in one panel, the ear always facing the voice", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 38, "scene": "こっち見なさい", "panels": [
+          {"no": 1, "chars": ["kinoshita_haha"], "motif": "MOUTH", "prompt": "her scream, mouth wide, tendons of the neck, realistic and painful, lamp light bleaching the face", "dialogue": [{"speaker": "木下", "text": "ゆあ!ゆあ!こっち見なさい!お母さんの顔、見なさい!", "type": "shout"}], "sfx": null},
+          {"no": 2, "chars": ["yua"], "prompt": "{yua} exhales like an adult, small shoulders dropping", "dialogue": [{"speaker": "ゆあ", "text": "ふう", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["yua", "kinoshita_haha"], "motif": "EAR", "prompt": "large panel: still facing away, she takes her mother's hand; composition centered on the back of the girl's head, the ear through the bob cut the sharpest element in frame, mother's stunned face beyond", "dialogue": [{"speaker": "ゆあ", "text": "ママ、はやく。おうち帰ろ", "type": "normal"}], "sfx": null},
+          {"no": 4, "chars": ["kinoshita_haha", "yua"], "prompt": "long shot: the mother dragged along toward the slope, two silhouettes leaving the lamp's cone into hatched black", "dialogue": [], "sfx": null}
+        ]},
+        {"page": 39, "scene": "確かめられてる", "panels": [
+          {"no": 1, "chars": ["yua", "hogosha_b"], "prompt": "passing by, {yua} turns her face fully and properly toward B's family, bright ordinary child smile, the sudden normalcy the horror", "dialogue": [{"speaker": "ゆあ", "text": "ゆりちゃんのパパ、ばいばい", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["hogosha_b"], "prompt": "present, {hogosha_b} pale", "dialogue": [{"speaker": "B", "text": "お母さんにだけ、顔を見せへんのです", "type": "normal"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_b"], "prompt": "closer", "dialogue": [{"speaker": "B", "text": "あのルールは、子どもだけを確かめるルールと違う。呼ぶ方も、確かめられてるんです", "type": "normal"}, {"speaker": "B", "text": "門灯の下で確かめられてたんは…木下さんの方やったんかもしれません", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 40, "scene": "資料6・夏祭り", "panels": [
+          {"no": 1, "chars": [], "prompt": "festival notice facsimile: no lost-child names over PA / do not call toward dark areas / west gate stays shut", "dialogue": [{"speaker": "紙面", "text": "・迷子のお名前は放送いたしません ・暗がりに向かってお呼びにならないでください ・西門は開放いたしません", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "festival night: the yard flooded by floodlights so bright there are no shadows, the boundary between light and dark a ruler-straight line, a teacher standing just inside it with her back to the darkness, cinematic symmetry", "dialogue": [{"speaker": "B妻", "text": "この園、防犯意識だけは日本一やね", "type": "normal"}], "sfx": null}
+        ]}
+      ]
+    },
+    {
+      "sheet": 3,
+      "pages_range": "P41-P48(+空白12セル)",
+      "pages": [
+        {"page": 41, "scene": "迷子放送", "panels": [
+          {"no": 1, "chars": [], "prompt": "PA speaker against floodlit sky", "dialogue": [{"speaker": "放送", "text": "迷子のお知らせです。青いTシャツの、四歳くらいの男の子を——", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "a mother running white-faced to the HQ tent, motion blur in hatching", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "she looks into the tent and collapses to a crouch, seen from behind, tent light spilling around her silhouette", "dialogue": [{"speaker": "母親", "text": "うちの子と、違います", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 42, "scene": "だっこ", "panels": [
+          {"no": 1, "chars": ["kaii"], "motif": "EAR", "prompt": "large panel: a boy in a blue T-shirt on a pipe chair drinking barley tea, sees the mother and smiles wide, arms spread for a hug; his ears drawn one degree too crisp, too high, the only wrong note in an otherwise photoreal child", "dialogue": [{"speaker": "母親", "text": "なんでこの子は、私に向かって手ぇ広げるんですか?", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["kaii"], "motif": "EAR", "prompt": "the child led away, turning back over his shoulder to wave at everyone and no one, every adult in the yard averting their eyes, wide shot, the ear rim-lit by floodlights", "dialogue": [{"speaker": "青いTシャツの子", "text": "ばいばい、ばいばい", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 43, "scene": "一人多い", "panels": [
+          {"no": 1, "chars": ["hogosha_b"], "prompt": "present", "dialogue": [{"speaker": "B", "text": "その日の来園者の子どもの数と、名簿が…一人、多かった", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "motif": "MOUTH", "prompt": "18:30, floodlights surge; across the yard dozens of parents calling at once, the panel filled edge to edge with speech balloons and realistic calling mouths, a choir", "dialogue": [{"speaker": "放送", "text": "おしまいです。お名前を、三回", "type": "normal"}], "sfx": "――ちゃん――ちゃん――ちゃん"},
+          {"no": 3, "chars": ["kaii", "yuri", "hogosha_b"], "motif": "EAR", "prompt": "B looking back at the gate: at the razor edge between light and dark, the blue T-shirt, waving; only its ears inside the light; foreground {yuri} facing forward, whispering", "dialogue": [{"speaker": "ゆり", "text": "パパ、あの子にバイバイしたらあかんで。バイバイは、おかえりの挨拶やから", "type": "whisper"}], "sfx": null}
+        ]},
+        {"page": 44, "scene": "資料7・留守電", "panels": [
+          {"no": 1, "chars": [], "prompt": "September newsletter facsimile", "dialogue": [{"speaker": "紙面", "text": "木下ゆあちゃんが退園されました/木下さんからのお電話には出ないでください/留守番電話にお子さまのお名前が残っていた場合は、消去せず園へ", "type": "document"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "cassette tape and audio waveform rendered as document exhibit, hatched", "dialogue": [{"speaker": "木下(録音)", "text": "――ちゃんの、下のお名前…読みだけで、教えてくれませんか", "type": "document"}], "sfx": null},
+          {"no": 3, "chars": ["kaii"], "motif": "EAR", "prompt": "the waveform continuing, a second smaller voice very close to the mouthpiece; inset: extreme close-up of a small ear pressed against the phone receiver in darkness", "dialogue": [{"speaker": "子どもの声(録音)", "text": "ママ、だれにかけてるん。ゆあ、ここにおるで。ここやで。こっちやで", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 45, "scene": "木下家消失", "panels": [
+          {"no": 1, "chars": ["kourou_c"], "prompt": "{kourou_c} in the butsuma, dusk now, the light shaft gone amber", "dialogue": [{"speaker": "C", "text": "お盆前から、木下さんの家、夜通し声がしたそうです。木下ゆあ、木下ゆあ、木下ゆあ…朝方まで", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": ["yua", "kaii"], "motif": "EAR", "prompt": "daytime: the Kinoshita genkan seen from the street, deep darkness inside the open door, a small figure waving cheerfully to neighbors only, ear catching daylight at the edge of the dark", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": [], "prompt": "macro: a single line of handwriting on paper on a kitchen table, furniture and car untouched beyond", "dialogue": [{"speaker": "書き置き", "text": "ほんもののゆあをむかえにいきます。こんどはちゃんとかぞえます", "type": "document"}], "sfx": null}
+        ]},
+        {"page": 46, "scene": "桜の下の三人", "panels": [
+          {"no": 1, "chars": ["kaii"], "prompt": "night: outside the west gate, under the great cherry tree, three hand-holding silhouettes facing the trunk, seen from far away, moonless hatched black, cinematic long lens compression", "dialogue": [], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "the witness's face only, mouth opening to call out and freezing — whatever the girl turned into is never shown, the horror carried entirely by this adult's face, hard key light", "dialogue": [], "sfx": null},
+          {"no": 3, "chars": ["kourou_c"], "prompt": "{kourou_c} in near darkness now", "dialogue": [{"speaker": "C", "text": "口に出したらね、あかんのです。ああいうのは、聞いた人の頭ん中に、住むから", "type": "normal"}], "sfx": null},
+          {"no": 4, "chars": ["kourou_c", "narrator"], "prompt": "she looks directly at the faceless narrator across the table", "dialogue": [{"speaker": "C", "text": "あんた、この取材で、ようけの人に名刺配りましたやろ", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 47, "scene": "A最終証言", "panels": [
+          {"no": 1, "chars": ["hogosha_a"], "prompt": "station front, {hogosha_a} checking her watch, crowd blurred", "dialogue": [{"speaker": "A", "text": "9月号を読んで、転園を決めました。『おうち、こっちやで』——うちの悠真も、言うたことがあるんです", "type": "normal"}], "sfx": null},
+          {"no": 2, "chars": [], "prompt": "macro: the withdrawal questionnaire envelope", "dialogue": [{"speaker": "封筒", "text": "お子さまがお休みになってから、ご記入ください", "type": "document"}], "sfx": null},
+          {"no": 3, "chars": ["hogosha_a"], "motif": "MOUTH", "prompt": "close on her mouth as she leaves, lips barely moving", "dialogue": [{"speaker": "A", "text": "あれは、アンケートと違います。答え合わせです。最後の一問で、こっちに", "type": "normal"}, {"speaker": "A", "text": "載せるんやったら、最後まで載せてあげてください。読んだ人が、最後の一問まで行けるように。——その方が、親切やから", "type": "normal"}], "sfx": null}
+        ]},
+        {"page": 48, "scene": "巻末アンケート(ラスト)", "panels": [
+          {"no": 1, "chars": [], "prompt": "full page: the final questionnaire rendered as a real printed form handed to the reader, questions 1-9 in small type, the paper lit by a single lamp with the reader's implied shadow falling across the bottom edge, question 10 large; a tiny handwritten note in the corner; fourth-wall document horror", "dialogue": [
+            {"speaker": "紙面", "text": "問9. いま、お子さまは、寝ていらっしゃいますか", "type": "document"},
+            {"speaker": "紙面", "text": "問10. それは、いつから後ろに立っていますか。振り向く前に、最後にもう一度だけ、ご確認ください。", "type": "document"},
+            {"speaker": "紙面", "text": "あの日、連れて帰ったのは、本当にお子さまでしたか。", "type": "document"},
+            {"speaker": "手書き(極小)", "text": "あなたがこれを読んでいるあいだ、あなたの後ろが無防備だったことだけは、確かだ", "type": "caption_small"}
+          ], "sfx": "(了)"}
+        ]},
+        {"page": "49-60", "scene": "空白セル", "panels": [
+          {"no": 1, "chars": [], "prompt": "solid black panel, faint hatching texture only (シート3の余り12セルを黒ベタで埋める)", "dialogue": [], "sfx": null}
+        ]}
+      ]
+    }
+  ]
+}

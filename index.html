@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>シートリーダー — おむかえのお願い</title>
+<style>
+  :root{--ink:#0a0a0c;--paper:#e8e4da;--accent:#7a1f1f;--accent-deep:#3d0f0f;--gold:#9c8a5a;--line:#2c2a26}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ink);color:var(--paper);font-family:"Hiragino Mincho ProN","Yu Mincho",serif;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+  header{background:linear-gradient(180deg,var(--accent),var(--accent-deep));padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--gold)}
+  header h1{font-size:15px;font-weight:600;letter-spacing:.12em}
+  .controls{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  select,button,input[type=file]{font-family:inherit;font-size:12px;background:rgba(0,0,0,.28);color:var(--paper);border:1px solid rgba(232,228,218,.45);border-radius:16px;padding:5px 12px;cursor:pointer}
+  button:hover,select:hover{border-color:var(--gold)}
+  button.active{background:var(--gold);color:#1a1206;border-color:var(--gold)}
+  input[type=file]{max-width:220px}
+
+  main{flex:1;display:grid;place-items:center;padding:12px;min-height:0;user-select:none}
+  .book{display:none;height:100%;max-width:100%;gap:0;justify-content:center}
+  .book.show{display:flex}
+  .page{height:100%;aspect-ratio:672/1180;background-repeat:no-repeat;box-shadow:0 0 30px rgba(0,0,0,.7);position:relative;background-color:#050505;overflow:hidden}
+  .page .pn{position:absolute;bottom:4px;width:100%;text-align:center;font-size:11px;color:#8f887a;letter-spacing:.15em;text-shadow:0 0 4px #000;z-index:3}
+  .page.blank{background:#050505;box-shadow:none}
+  /* セリフオーバーレイ */
+  .dlg{position:absolute;left:0;right:0;padding:2px 6px;display:flex;flex-direction:column;gap:3px;align-items:flex-end;z-index:2;pointer-events:none}
+  .bubble{max-width:88%;background:rgba(245,242,235,.92);color:#111;border:1px solid #222;border-radius:10px;padding:3px 8px;font-size:clamp(8px,1.4vh,13px);line-height:1.45;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+  .bubble .sp{color:var(--accent);font-size:.8em;margin-right:.4em}
+  .bubble.title{background:transparent;color:#f2ede2;border:none;font-size:clamp(12px,2.4vh,22px);font-weight:700;letter-spacing:.2em;text-shadow:0 0 8px #000,0 0 3px #000;box-shadow:none}
+  .bubble.caption_small,.bubble.caption{background:rgba(10,10,12,.82);color:#ddd6c8;border-color:#555;font-size:clamp(7px,1.15vh,11px)}
+  .bubble.document{background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(7px,1.2vh,11px)}
+  .bubble.mono,.bubble.whisper{background:rgba(20,18,20,.85);color:#cfc6b4;border-color:#666;font-style:italic}
+  .bubble.shout{font-weight:700;border-width:2px}
+  .sfx{position:absolute;right:4px;color:#f2ede2;font-weight:700;font-size:clamp(9px,1.6vh,15px);writing-mode:vertical-rl;text-shadow:0 0 6px #000,0 0 2px #000;z-index:2;pointer-events:none;letter-spacing:.1em}
+  /* 20p一覧 */
+  .sheetview{display:none;height:100%;max-width:100%;aspect-ratio:3360/2360}
+  .sheetview.show{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:4px;direction:rtl}
+  .sheetview .cell{direction:ltr;position:relative;background-repeat:no-repeat;border:1px solid var(--line);cursor:pointer;background-color:#050505}
+  .sheetview .cell:hover{border-color:var(--gold)}
+  .sheetview .cell span{position:absolute;bottom:3px;left:3px;font-size:10px;color:var(--gold);background:rgba(5,5,5,.8);padding:1px 6px;border-radius:10px;pointer-events:none}
+  .sheetview .cell.current{outline:2px solid var(--gold)}
+
+  .tapzone{position:fixed;top:110px;bottom:50px;width:28%;z-index:5;cursor:pointer}
+  #tapL{left:0}#tapR{right:0}
+  footer{padding:8px;text-align:center;font-size:12px;letter-spacing:.2em;color:#8f887a;border-top:1px solid var(--line)}
+  .empty-msg{color:#5d564a;letter-spacing:.2em;font-size:13px;text-align:center;line-height:2}
+</style>
+</head>
+<body>
+<header>
+  <h1>『おむかえのお願い』シートリーダー</h1>
+  <div class="controls">
+    <button id="mSpread" class="active">見開き</button>
+    <button id="mSingle">単ページ</button>
+    <button id="mSheet">20p一覧</button>
+    <button id="mDlg" class="active">セリフ</button>
+    <input type="file" id="files" accept="image/*" multiple title="20pシート画像を章順に選択">
+  </div>
+</header>
+<main id="main">
+  <div class="empty-msg">sheets/ フォルダの生成済みシートを読込中…<br>または、20ページ分を1枚にまとめたシート画像を選択してください<br>(1枚=5列×4行=20p/複数枚可・ファイル名順)</div>
+  <div class="book" id="book"></div>
+  <div class="sheetview" id="sheet"></div>
+</main>
+<div class="tapzone" id="tapL" title="次へ"></div>
+<div class="tapzone" id="tapR" title="前へ"></div>
+<footer id="foot">右から左へ読みます | 左タップ・←キー で次のページ</footer>
+
+<script>
+const COLS=5, ROWS=4, PPS=COLS*ROWS;
+let sheets=[];        // 画像URLの配列(1枚=20p)
+let total=0;          // 総ページ数
+let cur=1;            // 現在ページ(1-based)
+let mode='spread';    // spread | single | sheet
+let showDlg=true;
+let pageData={};      // page番号 → {panels:[{dialogue,sfx},...]}
+
+// page n(1-based) → {sheetIdx, col(左起点0-4), row}
+function locate(n){
+  const i=n-1, s=Math.floor(i/PPS), k=i%PPS;
+  const row=Math.floor(k/COLS), colFromRight=k%COLS;
+  return {s, col:COLS-1-colFromRight, row};
+}
+function paint(el,n){
+  const {s,col,row}=locate(n);
+  el.style.backgroundImage=`url(${sheets[s]})`;
+  el.style.backgroundSize=`${COLS*100}% ${ROWS*100}%`;
+  el.style.backgroundPosition=`${col/(COLS-1)*100}% ${row/(ROWS-1)*100}%`;
+}
+// セリフ・SFXをページ要素に重ねる(パネルは縦積み等分と仮定)
+function overlay(el,n){
+  const pd=pageData[n]; if(!pd||!showDlg) return;
+  const cnt=pd.panels.length;
+  pd.panels.forEach((pn,idx)=>{
+    const top=idx/cnt*100;
+    if(pn.dialogue&&pn.dialogue.length){
+      const box=document.createElement('div'); box.className='dlg';
+      box.style.top=top+'%'; box.style.maxHeight=(100/cnt)+'%';
+      for(const d of pn.dialogue){
+        const b=document.createElement('div'); b.className='bubble '+(d.type||'normal');
+        if(d.type!=='title'&&d.speaker&&!['紙面','タイトル'].includes(d.speaker)){
+          const sp=document.createElement('span'); sp.className='sp'; sp.textContent=d.speaker; b.appendChild(sp);
+        }
+        b.appendChild(document.createTextNode(d.text));
+        box.appendChild(b);
+      }
+      el.appendChild(box);
+    }
+    if(pn.sfx){
+      const s=document.createElement('div'); s.className='sfx';
+      s.style.top=(top+2)+'%'; s.textContent=pn.sfx;
+      el.appendChild(s);
+    }
+  });
+}
+
+const book=document.getElementById('book'), sheetV=document.getElementById('sheet'),
+      foot=document.getElementById('foot'), emptyMsg=document.querySelector('.empty-msg');
+
+function render(){
+  if(!total){return}
+  emptyMsg.style.display='none';
+  book.classList.toggle('show', mode!=='sheet');
+  sheetV.classList.toggle('show', mode==='sheet');
+
+  if(mode==='sheet'){
+    const s=locate(cur).s;
+    sheetV.innerHTML='';
+    for(let k=0;k<PPS;k++){
+      const n=s*PPS+k+1; if(n>total) break;
+      const c=document.createElement('div'); c.className='cell'+(n===cur?' current':'');
+      paint(c,n);
+      const t=document.createElement('span'); t.textContent=n+'p'; c.appendChild(t);
+      c.onclick=e=>{e.stopPropagation(); cur=n; mode='spread'; setBtns(); render();};
+      sheetV.appendChild(c);
+    }
+    foot.textContent=`シート ${s+1} / ${sheets.length} (${s*PPS+1}〜${Math.min((s+1)*PPS,total)}p) | セルをタップで見開きへ`;
+    return;
+  }
+
+  book.innerHTML='';
+  if(mode==='single'){
+    book.appendChild(mk(cur,false));
+    foot.textContent=`${cur} / ${total} ページ | 左タップ・←キーで次へ`;
+  }else{
+    // 見開き: 右=奇数p, 左=偶数p
+    const right=(cur%2===1)?cur:cur-1, left=right+1;
+    book.appendChild(mk(left,  left>total));   // DOM順: 左が先
+    book.appendChild(mk(right, false));
+    foot.textContent=`${right}${left<=total?'-'+left:''} / ${total} ページ | 左タップ・←キーで次の見開き`;
+  }
+  function mk(n,blank){
+    const d=document.createElement('div'); d.className='page'+(blank?' blank':'');
+    if(!blank){
+      paint(d,n); overlay(d,n);
+      const s=document.createElement('div'); s.className='pn'; s.textContent=n; d.appendChild(s);
+    }
+    return d;
+  }
+}
+
+function step(dir){ // dir +1=次(左方向) -1=前
+  if(!total) return;
+  if(mode==='sheet'){ cur=Math.min(Math.max(cur+dir*PPS,1),total); }
+  else if(mode==='single'){ cur=Math.min(Math.max(cur+dir,1),total); }
+  else{ cur=Math.min(Math.max(cur+dir*2,1),total); }
+  render();
+}
+document.getElementById('tapL').onclick=()=>step(1);
+document.getElementById('tapR').onclick=()=>step(-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft')step(1);
+  if(e.key==='ArrowRight')step(-1);
+});
+let sx=null;
+document.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+document.addEventListener('touchend',e=>{
+  if(sx===null)return; const dx=e.changedTouches[0].clientX-sx; sx=null;
+  if(Math.abs(dx)>60) step(dx>0?1:-1); // 右スワイプ=次
+},{passive:true});
+
+function setBtns(){
+  for(const [id,m] of [['mSpread','spread'],['mSingle','single'],['mSheet','sheet']]){
+    document.getElementById(id).classList.toggle('active',mode===m);
+  }
+  document.getElementById('mDlg').classList.toggle('active',showDlg);
+}
+for(const [id,m] of [['mSpread','spread'],['mSingle','single'],['mSheet','sheet']]){
+  document.getElementById(id).onclick=()=>{mode=m;setBtns();render();};
+}
+document.getElementById('mDlg').onclick=()=>{showDlg=!showDlg;setBtns();render();};
+
+document.getElementById('files').onchange=e=>{
+  const fs=[...e.target.files].sort((a,b)=>a.name.localeCompare(b.name,'ja',{numeric:true}));
+  sheets=fs.map(f=>URL.createObjectURL(f));
+  setTotal();
+  render();
+};
+
+function setTotal(){
+  // 最終シートの実ページ数(ネームJSONの総ページ数)を反映
+  total=sheets.length*PPS;
+  if(lastSheetPages!==null && sheets.length===expectedSheets){
+    total=(sheets.length-1)*PPS+lastSheetPages;
+  }
+  cur=Math.min(cur,total)||1;
+}
+
+// ネームJSON(セリフ)と生成済みシートの自動読込
+let lastSheetPages=null, expectedSheets=null;
+(async function init(){
+  try{
+    const res=await fetch('data/omukae_name_sheets.json');
+    if(res.ok){
+      const nm=await res.json();
+      expectedSheets=nm.format?.sheets_total??null;
+      let maxPage=0;
+      for(const sh of nm.sheets){
+        for(const pg of sh.pages){
+          if(typeof pg.page!=='number') continue; // "49-60"等の空白セル指定
+          pageData[pg.page]={panels:pg.panels.map(p=>({dialogue:p.dialogue||[],sfx:p.sfx||null}))};
+          maxPage=Math.max(maxPage,pg.page);
+        }
+      }
+      if(expectedSheets) lastSheetPages=maxPage-(expectedSheets-1)*PPS;
+      document.title='シートリーダー — '+(nm.title||document.title);
+    }
+  }catch(_){/* file://直開き等。セリフ無しで続行 */}
+  // sheets/sheet_omukae_01.png … を連番で自動読込
+  const found=[];
+  for(let i=1;i<=99;i++){
+    const url=`sheets/sheet_omukae_${String(i).padStart(2,'0')}.png`;
+    const ok=await new Promise(r=>{const im=new Image();im.onload=()=>r(true);im.onerror=()=>r(false);im.src=url;});
+    if(!ok) break;
+    found.push(url);
+  }
+  if(found.length){ sheets=found; setTotal(); render(); }
+})();
+</script>
+</body>
+</html>

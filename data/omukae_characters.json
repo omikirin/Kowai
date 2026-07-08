@@ -1,0 +1,80 @@
+{
+  "title": "『おむかえのお願い』キャラクター・作画設定",
+  "style_suffix": "realistic seinen manga art, monochrome ink, extreme chiaroscuro lighting, heavy cross-hatching and dense pen shading, deep blacks, cinematic film-still composition, wide anamorphic framing, shallow staging depth",
+  "art_direction": {
+    "base": "リアル調・常にモノクロ。光源と闇のコントラストを極端に強く取り、中間調はハッチングで作る(トーン貼りではなくペン画の質感)",
+    "cinema_rule": "全コマ「映画のスチール」として設計。ロングショット/切り返し/浅い被写界深度の寄り/逆光シルエットを織り交ぜ、テレビ的な正面バストアップを避ける。余白=闇はベタとハッチングの境目で作る",
+    "motif_rules": {
+      "怪異側": "耳を際立たせる。怪異そのもの・入れ替わりが疑われる子・『聞いているもの』の登場コマでは、耳のクローズアップ、髪の隙間から覗く耳、光が耳の縁だけを拾う描写を優先。怪異の輪郭は描いても耳の位置だけ異様に明確に",
+      "呼ぶ側(親)": "口元を増やす。名前を呼ぶ・唱えるコマでは、リアルに描き込んだ口元(唇の乾き、歯、皺、唾)のクローズアップを多用。顔全体を見せず口だけで芝居させるコマを各章に必ず入れる"
+    },
+    "prohibitions": "怪異の全身・顔は最後まで直接描かない。『写ってはいけないものが背景に写っている』演出を徹底"
+  },
+  "characters": {
+    "n_shi": {
+      "name": "N氏(オカルトライター)",
+      "anchor_prompt": "1man, 30s Japanese man, unshaven stubble, tired hooded eyes, rumpled shirt, cafe lighting from window, realistic proportions",
+      "notes": "導入のみ。最後のコマで初めて笑いが消える顔"
+    },
+    "narrator": {
+      "name": "語り手(筆者)",
+      "anchor_prompt": "faceless narrator, only hands and back of head ever shown, dark study room, desk lamp as sole light source",
+      "notes": "顔は最後まで描かない。手と後ろ姿のみ"
+    },
+    "hogosha_a": {
+      "name": "保護者A(悠真の母・30代)",
+      "anchor_prompt": "1woman, mid-30s Japanese working mother, hair tied back loosely, practical clothes, fatigue under eyes, realistic detailed lips",
+      "motif": "mouth",
+      "notes": "口元芝居の主担当。P24-27の夕立回で口のアップ最多"
+    },
+    "yuma": {
+      "name": "悠真(3歳・Aの息子)",
+      "anchor_prompt": "3 year old Japanese boy, round cheeks, bowl cut, raincoat hood in rain scenes",
+      "motif": "ear_when_doubted",
+      "notes": "P25-26の『ママ』連呼シーンではフードの奥の耳だけを描く"
+    },
+    "hogosha_b": {
+      "name": "保護者B(ゆりの父・40代)",
+      "anchor_prompt": "1man, 40s Japanese father, glasses, polo shirt, mild build, honest worried face",
+      "motif": "mouth"
+    },
+    "yuri": {
+      "name": "ゆり(5歳・Bの娘)",
+      "anchor_prompt": "5 year old Japanese girl, twin tails, energetic",
+      "notes": "P43『バイバイは、おかえりの挨拶やから』を前を向いたまま言う"
+    },
+    "kinoshita_haha": {
+      "name": "木下さん(ゆあの母)",
+      "anchor_prompt": "1woman, late 30s Japanese mother, neat but increasingly disheveled across chapters, desperate eyes, realistic cracked lips",
+      "motif": "mouth",
+      "notes": "P37-38門灯の下が山場。口元の描き込みを作中最大密度に"
+    },
+    "yua": {
+      "name": "ゆあ(5歳・木下家)",
+      "anchor_prompt": "5 year old Japanese girl, okappa bob haircut, calm unreadable expression, ear visible through straight black hair",
+      "motif": "ear",
+      "notes": "怪異疑いの中心。登場コマは常に耳を髪の間から明確に見せる。母と目を合わせない角度の首の芝居"
+    },
+    "kourou_c": {
+      "name": "古老C(60代女性)",
+      "anchor_prompt": "1woman, 60s Japanese elder, kimono-like housewear, butsuma tatami room, deep facial wrinkles rendered in cross-hatching",
+      "notes": "仏間の斜光。眼鏡を外す・コピーを裏返す手の芝居"
+    },
+    "sensei": {
+      "name": "ベテラン先生",
+      "anchor_prompt": "1woman, 50s nursery teacher, apron, professional smile that does not reach the eyes",
+      "notes": "P17『目だけ笑っていない』作り笑い"
+    },
+    "encho": {
+      "name": "園長",
+      "anchor_prompt": "elderly nursery principal, backlit at meeting podium, face half in shadow",
+      "notes": "P36は逆光でほぼシルエット、口元だけ光が当たる"
+    },
+    "kaii": {
+      "name": "怪異(よんでくるもの)",
+      "anchor_prompt": "unseen presence, only faint outline in darkness, EXCEPT the ears: the silhouette of ears is always the sharpest, most defined element, slightly wrong in placement or size, heavy hatching dissolving the rest of the body",
+      "motif": "ear",
+      "notes": "全身・顔は最後まで描かない。桜の幹の陰(P11)、門灯の輪の外(P19)、光と闇の境目(P43)。耳の輪郭だけ異様に明確、が唯一の視覚署名"
+    }
+  }
+}
