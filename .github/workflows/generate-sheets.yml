@@ -10,7 +10,7 @@ on:
       model:
         description: "falモデルID"
         required: false
-        default: "fal-ai/flux/dev"
+        default: "fal-ai/nano-banana-pro"
 
 permissions:
   contents: write
