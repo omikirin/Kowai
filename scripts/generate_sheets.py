@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """『おむかえのお願い』20pシート画像を fal.ai で生成する。
 
-data/omukae_name_sheets.json の各シート(5列x4行=20ページ、右上起点・右→左)を
-1枚の画像として生成し、sheets/sheet_omukae_{nn}.png に保存する。
+1シート丸ごとの生成では拡散モデルが 5x4 グリッドを守れないため、
+ページ単位で生成し、Pillow で 5列x4行(右上=P1、右→左)に合成する。
+足りないセルは黒ベタ。モノクロ原作のためグレースケール化して保存する。
 セリフは画像に焼き込まず、リーダー(index.html)側でオーバーレイ描画する。
 
 使い方:
     FAL_KEY=xxxx python3 scripts/generate_sheets.py [--sheet N] [--model MODEL]
 """
 import argparse
+import io
 import json
 import os
 import re
@@ -16,11 +18,12 @@ import sys
 import time
 import urllib.request
 
+from PIL import Image
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_MODEL = "fal-ai/flux/dev"
-# シート比率 3360:2360 ≒ 1.42:1(仕様の practical 解像度)。
-# モデル側の上限に収まるサイズで生成し、リーダー側は比率でクロップするため解像度非依存。
-WIDTH, HEIGHT = 1420, 1000
+COLS, ROWS = 5, 4
+PW, PH = 672, 1184  # 1ページの生成サイズ(仕様の 672:1180 比にほぼ一致、8の倍数)
 
 
 def load(name):
@@ -36,44 +39,36 @@ def expand_chars(prompt, chars):
     return re.sub(r"\{(\w+)\}", rep, prompt)
 
 
-def build_prompt(sheet, fmt, chars, style_suffix):
+def build_page_prompt(page, chars, style_suffix):
+    n = len(page["panels"])
     lines = [
-        "manga page sheet, strict uniform 5 columns x 4 rows grid of 20 vertical manga pages,"
-        " no gutter, no border, read right to left, page 1 at top-right,",
+        f"single vertical manga page, {n} stacked panel{'s' if n > 1 else ''} from top to bottom,"
+        if n > 1 else "single full-page manga panel,",
     ]
-    n_pages = 0
-    for pg in sheet["pages"]:
-        if not isinstance(pg["page"], int):  # "49-60" 等の空白セル指定
-            continue
-        panels = "; ".join(p["prompt"] for p in pg["panels"])
-        panels = expand_chars(panels, chars)
-        lines.append(f"page {pg['page']}: {panels}")
-        n_pages += 1
-    if n_pages < 20:
-        lines.append(f"remaining {20 - n_pages} grid cells: solid black fill")
+    for i, p in enumerate(page["panels"], 1):
+        lines.append(f"panel {i}: {expand_chars(p['prompt'], chars)}")
     lines.append("no text, no speech bubbles, no lettering,")
+    lines.append("monochrome black and white ink only,")
     lines.append(style_suffix)
     return "\n".join(lines)
 
 
 def fal_generate(model, prompt, key):
-    """fal.ai queue API で生成し、画像URLを返す。"""
+    """fal.ai queue API で1ページ生成し、画像バイト列を返す。"""
     base = f"https://queue.fal.run/{model}"
     body = json.dumps({
         "prompt": prompt[:5000],
-        "image_size": {"width": WIDTH, "height": HEIGHT},
-        "num_inference_steps": 40,
+        "image_size": {"width": PW, "height": PH},
+        "num_inference_steps": 28,
         "enable_safety_checker": True,
     }).encode()
     req = urllib.request.Request(base, data=body, headers={
         "Authorization": f"Key {key}", "Content-Type": "application/json"})
     with urllib.request.urlopen(req) as r:
         sub = json.load(r)
-    status_url = sub["status_url"]
-    response_url = sub["response_url"]
-    for _ in range(120):
+    for _ in range(100):
         time.sleep(3)
-        req = urllib.request.Request(status_url, headers={"Authorization": f"Key {key}"})
+        req = urllib.request.Request(sub["status_url"], headers={"Authorization": f"Key {key}"})
         with urllib.request.urlopen(req) as r:
             st = json.load(r)
         if st["status"] == "COMPLETED":
@@ -82,10 +77,11 @@ def fal_generate(model, prompt, key):
             raise RuntimeError(f"fal job failed: {st}")
     else:
         raise TimeoutError("fal job did not complete in time")
-    req = urllib.request.Request(response_url, headers={"Authorization": f"Key {key}"})
+    req = urllib.request.Request(sub["response_url"], headers={"Authorization": f"Key {key}"})
     with urllib.request.urlopen(req) as r:
         out = json.load(r)
-    return out["images"][0]["url"]
+    with urllib.request.urlopen(out["images"][0]["url"]) as r:
+        return r.read()
 
 
 def main():
@@ -108,11 +104,19 @@ def main():
         n = sheet["sheet"]
         if args.sheet and n != args.sheet:
             continue
+        canvas = Image.new("L", (PW * COLS, PH * ROWS), 0)  # 空セルは黒ベタ
+        for pg in sheet["pages"]:
+            if not isinstance(pg["page"], int):  # "49-60" 等の空白セル指定
+                continue
+            prompt = build_page_prompt(pg, chars, style)
+            print(f"[sheet {n}] P{pg['page']} ({pg['scene']}) ...", flush=True)
+            raw = fal_generate(args.model, prompt, key)
+            img = Image.open(io.BytesIO(raw)).convert("L").resize((PW, PH))
+            k = (pg["page"] - 1) % (COLS * ROWS)
+            row, col = k // COLS, COLS - 1 - (k % COLS)
+            canvas.paste(img, (col * PW, row * PH))
         out_path = os.path.join(ROOT, "sheets", f"sheet_omukae_{n:02d}.png")
-        prompt = build_prompt(sheet, name_sheets["format"], chars, style)
-        print(f"[sheet {n}] generating ({sheet['pages_range']}) ...", flush=True)
-        url = fal_generate(args.model, prompt, key)
-        urllib.request.urlretrieve(url, out_path)
+        canvas.save(out_path)
         print(f"[sheet {n}] saved -> {out_path}")
 
 
