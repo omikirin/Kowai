@@ -66,7 +66,7 @@ def fal_generate(model, prompt, key):
         "Authorization": f"Key {key}", "Content-Type": "application/json"})
     with urllib.request.urlopen(req) as r:
         sub = json.load(r)
-    for _ in range(100):
+    for _ in range(200):
         time.sleep(3)
         req = urllib.request.Request(sub["status_url"], headers={"Authorization": f"Key {key}"})
         with urllib.request.urlopen(req) as r:
@@ -104,14 +104,29 @@ def main():
         n = sheet["sheet"]
         if args.sheet and n != args.sheet:
             continue
+        pages_dir = os.path.join(ROOT, "sheets", "pages")
+        os.makedirs(pages_dir, exist_ok=True)
         canvas = Image.new("L", (PW * COLS, PH * ROWS), 0)  # 空セルは黒ベタ
         for pg in sheet["pages"]:
             if not isinstance(pg["page"], int):  # "49-60" 等の空白セル指定
                 continue
-            prompt = build_page_prompt(pg, chars, style)
-            print(f"[sheet {n}] P{pg['page']} ({pg['scene']}) ...", flush=True)
-            raw = fal_generate(args.model, prompt, key)
-            img = Image.open(io.BytesIO(raw)).convert("L").resize((PW, PH))
+            cache = os.path.join(pages_dir, f"p{pg['page']:02d}.png")
+            if os.path.exists(cache):  # 再実行時は生成済みページを再利用
+                img = Image.open(cache).convert("L")
+            else:
+                prompt = build_page_prompt(pg, chars, style)
+                print(f"[sheet {n}] P{pg['page']} ({pg['scene']}) ...", flush=True)
+                for attempt in range(3):
+                    try:
+                        raw = fal_generate(args.model, prompt, key)
+                        break
+                    except Exception as e:
+                        print(f"[sheet {n}] P{pg['page']} attempt {attempt+1} failed: {e}", flush=True)
+                        if attempt == 2:
+                            raise
+                        time.sleep(10)
+                img = Image.open(io.BytesIO(raw)).convert("L").resize((PW, PH))
+                img.save(cache)
             k = (pg["page"] - 1) % (COLS * ROWS)
             row, col = k // COLS, COLS - 1 - (k % COLS)
             canvas.paste(img, (col * PW, row * PH))
