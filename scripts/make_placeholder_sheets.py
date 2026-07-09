@@ -11,7 +11,7 @@ import os
 from PIL import Image, ImageDraw
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-COLS, ROWS = 5, 4
+COLS, ROWS = 4, 4
 PW, PH = 672, 590  # 仕様 practical: 1ページ 672x590
 
 
@@ -20,13 +20,18 @@ def main():
         name_sheets = json.load(f)
     os.makedirs(os.path.join(ROOT, "sheets"), exist_ok=True)
 
-    for sheet in name_sheets["sheets"]:
+    # ネームJSONは20p単位のグループだが、シートは16p単位で再分割する
+    pps = COLS * ROWS
+    all_pages = [pg for sh in name_sheets["sheets"] for pg in sh["pages"]
+                 if isinstance(pg["page"], int)]
+    all_pages.sort(key=lambda p: p["page"])
+    chunks = [all_pages[i:i + pps] for i in range(0, len(all_pages), pps)]
+
+    for sheet_no, pages in enumerate(chunks, 1):
         img = Image.new("L", (PW * COLS, PH * ROWS), 8)
         d = ImageDraw.Draw(img)
-        for pg in sheet["pages"]:
-            if not isinstance(pg["page"], int):  # "49-60" 等の空白セル指定は黒ベタのまま
-                continue
-            k = (pg["page"] - 1) % (COLS * ROWS)
+        for pg in pages:
+            k = (pg["page"] - 1) % pps
             row, col = k // COLS, COLS - 1 - (k % COLS)
             x, y = col * PW, row * PH
             d.rectangle([x + 2, y + 2, x + PW - 3, y + PH - 3], fill=235, outline=40, width=2)
@@ -39,7 +44,7 @@ def main():
                 d.line([x + pad, py, x + PW - pad, py + panel_h], fill=180, width=1)
                 d.line([x + pad, py + panel_h, x + PW - pad, py], fill=180, width=1)
             d.text((x + pad, y + 10), f"P{pg['page']}  {pg['scene']}", fill=30)
-        out = os.path.join(ROOT, "sheets", f"sheet_omukae_{sheet['sheet']:02d}.png")
+        out = os.path.join(ROOT, "sheets", f"sheet_omukae_{sheet_no:02d}.png")
         img.save(out)
         print("saved", out)
 

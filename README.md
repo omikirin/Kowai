@@ -1,6 +1,6 @@
 # おむかえのお願い — 20pシートリーダー
 
-1枚の画像に20ページ(5列×4行・右上起点・右→左)を敷き詰めた「シート」を、
+1枚の画像に16ページ(4列×4行・右上起点・右→左)を敷き詰めた「シート」を、
 ブラウザ上で見開き/単ページ/一覧表示する電子リーダー。
 
 ## 構成
@@ -29,4 +29,4 @@ FAL_KEY=xxxx python3 scripts/generate_sheets.py --sheet 2  # 1枚のみ
 FAL_KEY=xxxx python3 scripts/generate_sheets.py --model fal-ai/flux-pro/v1.1
 ```
 
-ページ番号 n のクロップ規則: `col = 4 - ((n-1) % 5)`, `row = floor((n-1) / 5)`(仕様は `data/sheet_reader_spec.json`)。
+ページ番号 n のクロップ規則: `col = 3 - ((n-1) % 4)`, `row = floor((n-1) / 4)`(仕様は `data/sheet_reader_spec.json`)。

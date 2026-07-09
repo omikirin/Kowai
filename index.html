@@ -34,8 +34,8 @@
   .bubble.shout{font-weight:700;border-width:2px}
   .sfx{position:absolute;right:4px;color:#f2ede2;font-weight:700;font-size:clamp(9px,1.6vh,15px);writing-mode:vertical-rl;text-shadow:0 0 6px #000,0 0 2px #000;z-index:2;pointer-events:none;letter-spacing:.1em}
   /* 20p一覧 */
-  .sheetview{display:none;height:100%;max-width:100%;aspect-ratio:3360/4480}
-  .sheetview.show{display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(4,1fr);gap:4px;direction:rtl}
+  .sheetview{display:none;height:100%;max-width:100%;aspect-ratio:2688/4736}
+  .sheetview.show{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:4px;direction:rtl}
   .sheetview .cell{direction:ltr;position:relative;background-repeat:no-repeat;border:1px solid var(--line);cursor:pointer;background-color:#050505}
   .sheetview .cell:hover{border-color:var(--gold)}
   .sheetview .cell span{position:absolute;bottom:3px;left:3px;font-size:10px;color:var(--gold);background:rgba(5,5,5,.8);padding:1px 6px;border-radius:10px;pointer-events:none}
@@ -59,7 +59,7 @@
   </div>
 </header>
 <main id="main">
-  <div class="empty-msg">sheets/ フォルダの生成済みシートを読込中…<br>または、20ページ分を1枚にまとめたシート画像を選択してください<br>(1枚=5列×4行=20p/複数枚可・ファイル名順)</div>
+  <div class="empty-msg">sheets/ フォルダの生成済みシートを読込中…<br>または、16ページ分を1枚にまとめたシート画像を選択してください<br>(1枚=4列×4行=16p/複数枚可・ファイル名順)</div>
   <div class="book" id="book"></div>
   <div class="sheetview" id="sheet"></div>
 </main>
@@ -68,7 +68,7 @@
 <footer id="foot">右から左へ読みます | 左タップ・←キー で次のページ</footer>
 
 <script>
-const COLS=5, ROWS=4, PPS=COLS*ROWS;
+const COLS=4, ROWS=4, PPS=COLS*ROWS;
 let sheets=[];        // 画像URLの配列(1枚=20p)
 let total=0;          // 総ページ数
 let cur=1;            // 現在ページ(1-based)

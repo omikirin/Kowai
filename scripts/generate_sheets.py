@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
-"""『おむかえのお願い』20pシート画像を fal.ai (Nano Banana Pro) で生成する。
+"""『おむかえのお願い』16pシート画像を fal.ai (Nano Banana Pro) で生成する。
 
-data/omukae_name_sheets.json の各シート(5列x4行=20ページ、右上起点・右→左)を
-1枚の画像として生成し、sheets/sheet_omukae_{nn}.png に保存する。
+data/omukae_name_sheets.json の全ページを16p単位に分割し、各シート
+(4列x4行=16ページ、右上起点・右→左)を1枚の画像として生成して
+sheets/sheet_omukae_{nn}.png に保存する。
 モノクロ原作のためグレースケール化して保存。
 セリフは画像に焼き込まず、リーダー(index.html)側でオーバーレイ描画する。
 
@@ -22,9 +23,10 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_MODEL = "fal-ai/nano-banana-pro"
-# シートは縦長(5列x4行、各ページ672:1180)→ 全体比 3360:4720 ≒ 0.712。
-# Nano Banana Pro のプリセット比では 3:4(0.75) / 2:3(0.667) が近い。
-ASPECT_RATIO = "3:4"
+COLS, ROWS = 4, 4  # 1シート=16ページ
+# シートは縦長(4列x4行、各ページ672:1180)→ 全体比 2688:4720 ≒ 0.569。
+# Nano Banana Pro のプリセット比では 9:16(0.5625) が最も近い。
+ASPECT_RATIO = "9:16"
 RESOLUTION = "4K"
 
 
@@ -41,28 +43,24 @@ def expand_chars(prompt, chars):
     return re.sub(r"\{(\w+)\}", rep, prompt)
 
 
-def build_sheet_prompt(sheet, chars, style_suffix):
+def build_sheet_prompt(pages, chars, style_suffix):
+    pps = COLS * ROWS
     lines = [
-        "A single contact-sheet image containing exactly 20 manga pages arranged in a strict"
-        " uniform grid of 5 columns x 4 rows (equal-sized cells, no gutter, no outer margin).",
-        "Reading order is right-to-left, row by row: page 1 is the TOP-RIGHT cell, pages 1-5"
-        " fill the top row from right to left, page 6 starts the second row at the right, and"
-        " page 20 is the BOTTOM-LEFT cell.",
+        f"A single contact-sheet image containing exactly {pps} manga pages arranged in a strict"
+        f" uniform grid of {COLS} columns x {ROWS} rows (equal-sized cells, no gutter, no outer margin).",
+        f"Reading order is right-to-left, row by row: the first page is the TOP-RIGHT cell, the"
+        f" first {COLS} pages fill the top row from right to left, the next page starts the second"
+        f" row at the right, and the last cell is at the BOTTOM-LEFT.",
         "Each cell is one vertical manga page whose panels are stacked top to bottom.",
-        "Page contents:",
+        "Page contents (in reading order):",
     ]
-    n_pages = 0
-    for pg in sheet["pages"]:
-        if not isinstance(pg["page"], int):  # "49-60" 等の空白セル指定
-            continue
+    for pg in pages:
         panels = " / ".join(
             f"panel {p['no']}: {expand_chars(p['prompt'], chars)}" for p in pg["panels"])
         lines.append(f"- page {pg['page']}: {panels}")
-        n_pages += 1
-    if n_pages < 20:
+    if len(pages) < pps:
         lines.append(
-            f"- the remaining {20 - n_pages} cells (after page {sheet['pages'][n_pages - 1]['page']}"
-            " in reading order) are SOLID BLACK fill, completely empty.")
+            f"- the remaining {pps - len(pages)} cells are SOLID BLACK fill, completely empty.")
     lines.append(
         "No text, no speech bubbles, no lettering, no page numbers anywhere in the image.")
     lines.append("Entirely monochrome black-and-white ink artwork.")
@@ -117,13 +115,19 @@ def main():
     chars = characters["characters"]
     style = characters["style_suffix"]
 
+    # ネームJSONは20p単位のグループだが、シートは16p単位で再分割する
+    all_pages = [pg for sh in name_sheets["sheets"] for pg in sh["pages"]
+                 if isinstance(pg["page"], int)]
+    all_pages.sort(key=lambda p: p["page"])
+    pps = COLS * ROWS
+    chunks = [all_pages[i:i + pps] for i in range(0, len(all_pages), pps)]
+
     os.makedirs(os.path.join(ROOT, "sheets"), exist_ok=True)
-    for sheet in name_sheets["sheets"]:
-        n = sheet["sheet"]
+    for n, pages in enumerate(chunks, 1):
         if args.sheet and n != args.sheet:
             continue
-        prompt = build_sheet_prompt(sheet, chars, style)
-        print(f"[sheet {n}] generating ({sheet['pages_range']}) ...", flush=True)
+        prompt = build_sheet_prompt(pages, chars, style)
+        print(f"[sheet {n}] generating (P{pages[0]['page']}-P{pages[-1]['page']}) ...", flush=True)
         for attempt in range(3):
             try:
                 raw = fal_generate(args.model, prompt, key)
