@@ -23,13 +23,14 @@
   .page .pn{position:absolute;bottom:4px;width:100%;text-align:center;font-size:11px;color:#8f887a;letter-spacing:.15em;text-shadow:0 0 4px #000;z-index:3}
   .page.blank{background:#050505;box-shadow:none}
   /* セリフオーバーレイ */
-  .dlg{position:absolute;left:0;right:0;padding:2px 6px;display:flex;flex-direction:column;gap:3px;align-items:flex-end;z-index:2;pointer-events:none}
-  .bubble{max-width:88%;background:rgba(245,242,235,.92);color:#111;border:1px solid #222;border-radius:10px;padding:3px 8px;font-size:clamp(8px,1.4vh,13px);line-height:1.45;box-shadow:0 1px 4px rgba(0,0,0,.5)}
-  .bubble .sp{color:var(--accent);font-size:.8em;margin-right:.4em}
-  .bubble.title{background:transparent;color:#f2ede2;border:none;font-size:clamp(12px,2.4vh,22px);font-weight:700;letter-spacing:.2em;text-shadow:0 0 8px #000,0 0 3px #000;box-shadow:none}
-  .bubble.caption_small,.bubble.caption{background:rgba(10,10,12,.82);color:#ddd6c8;border-color:#555;font-size:clamp(7px,1.15vh,11px)}
-  .bubble.document{background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(7px,1.2vh,11px)}
-  .bubble.mono,.bubble.whisper{background:rgba(20,18,20,.85);color:#cfc6b4;border-color:#666;font-style:italic}
+  .dlg{position:absolute;left:0;right:0;padding:3px 6px;display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:flex-start;gap:5px;z-index:2;pointer-events:none}
+  .dlg .bubble{height:auto;max-height:100%;overflow:hidden}
+  .bubble{writing-mode:vertical-rl;text-orientation:mixed;max-height:100%;background:rgba(245,242,235,.94);color:#111;border:1.5px solid #222;border-radius:48% / 14%;padding:10px 5px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif;font-size:clamp(10px,1.9vh,17px);line-height:1.35;letter-spacing:.06em;box-shadow:0 1px 5px rgba(0,0,0,.55)}
+  .bubble .sp{display:block;color:var(--accent);font-size:.65em;margin-bottom:.5em}
+  .bubble.title{background:transparent;color:#f2ede2;border:none;border-radius:0;font-size:clamp(15px,3vh,28px);font-weight:700;letter-spacing:.25em;text-shadow:0 0 8px #000,0 0 3px #000;box-shadow:none}
+  .bubble.caption_small,.bubble.caption{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(10,10,12,.82);color:#ddd6c8;border-color:#555;font-size:clamp(9px,1.4vh,13px);padding:3px 8px}
+  .bubble.document{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(9px,1.45vh,13px);padding:3px 8px}
+  .bubble.mono,.bubble.whisper{background:rgba(20,18,20,.88);color:#cfc6b4;border-color:#666;border-radius:6px}
   .bubble.shout{font-weight:700;border-width:2px}
   .sfx{position:absolute;right:4px;color:#f2ede2;font-weight:700;font-size:clamp(9px,1.6vh,15px);writing-mode:vertical-rl;text-shadow:0 0 6px #000,0 0 2px #000;z-index:2;pointer-events:none;letter-spacing:.1em}
   /* 20p一覧 */
@@ -95,7 +96,7 @@ function overlay(el,n){
     const top=idx/cnt*100;
     if(pn.dialogue&&pn.dialogue.length){
       const box=document.createElement('div'); box.className='dlg';
-      box.style.top=top+'%'; box.style.maxHeight=(100/cnt)+'%';
+      box.style.top=top+'%'; box.style.height=(100/cnt)+'%';
       for(const d of pn.dialogue){
         const b=document.createElement('div'); b.className='bubble '+(d.type||'normal');
         if(d.type!=='title'&&d.speaker&&!['紙面','タイトル'].includes(d.speaker)){
