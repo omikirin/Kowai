@@ -25,14 +25,15 @@
   /* セリフオーバーレイ */
   .dlg{position:absolute;left:0;right:0;padding:3px 6px;display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:flex-start;gap:5px;z-index:2;pointer-events:none}
   .dlg .bubble{height:auto;max-height:100%}
-  .bubble{position:relative;writing-mode:vertical-rl;text-orientation:mixed;color:#111;padding:14px 9px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif;font-size:clamp(10px,1.9vh,17px);line-height:1.35;letter-spacing:.06em;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+  :root{--bubble-font:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif;--fs:1}
+  .bubble{position:relative;writing-mode:vertical-rl;text-orientation:mixed;color:#111;padding:22px 15px;font-family:var(--bubble-font);font-size:calc(clamp(10px,1.9vh,17px)*var(--fs));line-height:1.4;letter-spacing:.06em;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
   .bubble>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:-1}
   .bubble .sp{display:block;color:var(--accent);font-size:.65em;margin-bottom:.5em}
   .bubble.title{padding:4px;color:#f2ede2;font-size:clamp(15px,3vh,28px);font-weight:700;letter-spacing:.25em;text-shadow:0 0 8px #000,0 0 3px #000;filter:none}
   .bubble.caption_small,.bubble.caption{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(10,10,12,.82);color:#ddd6c8;border:1px solid #555;font-size:clamp(9px,1.4vh,13px);padding:3px 8px;filter:none}
   .bubble.document{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(9px,1.45vh,13px);padding:3px 8px;filter:none}
   .bubble.mono,.bubble.whisper{color:#333;font-style:normal}
-  .bubble.shout{font-weight:700;padding:18px 13px}
+  .bubble.shout{font-weight:700}
   .sfx{position:absolute;right:4px;color:#f2ede2;font-weight:700;font-size:clamp(9px,1.6vh,15px);writing-mode:vertical-rl;text-shadow:0 0 6px #000,0 0 2px #000;z-index:2;pointer-events:none;letter-spacing:.1em}
   /* 20p一覧 */
   .sheetview{display:none;height:100%;max-width:100%;aspect-ratio:2688/4736}
@@ -56,6 +57,18 @@
     <button id="mSingle">単ページ</button>
     <button id="mSheet">16p一覧</button>
     <button id="mDlg" class="active">セリフ</button>
+    <select id="fontSel" title="セリフの書体">
+      <option value="mincho">明朝</option>
+      <option value="gothic">ゴシック</option>
+      <option value="maru">丸ゴシック</option>
+      <option value="kaku">太ゴシック</option>
+    </select>
+    <select id="sizeSel" title="セリフの文字サイズ">
+      <option value="0.85">文字 小</option>
+      <option value="1" selected>文字 中</option>
+      <option value="1.2">文字 大</option>
+      <option value="1.4">文字 特大</option>
+    </select>
     <input type="file" id="files" accept="image/*" multiple title="16pシート画像を章順に選択">
   </div>
 </header>
@@ -98,15 +111,7 @@ function bubbleSvg(type, seed){
   const rnd=(i)=>{const x=Math.sin(seed*127.1+i*311.7)*43758.5453;return x-Math.floor(x);};
   const cx=50,cy=50;
   let d='';
-  if(type==='shout'){
-    const n=22,pts=[];
-    for(let i=0;i<n;i++){
-      const a=i/n*Math.PI*2;
-      const spike=(i%2?34:50)+rnd(i)*10;
-      pts.push([cx+Math.cos(a)*spike,cy+Math.sin(a)*spike*1.02]);
-    }
-    d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')+'Z';
-  }else if(type==='mono'||type==='whisper'){
+  if(type==='mono'||type==='whisper'){
     const n=14,pts=[];
     for(let i=0;i<n;i++){
       const a=i/n*Math.PI*2;
@@ -139,7 +144,7 @@ function bubbleSvg(type, seed){
   const path=document.createElementNS(NS,'path');
   path.setAttribute('d',d);
   const dark=(type==='mono'||type==='whisper');
-  path.setAttribute('fill',dark?'rgba(236,232,224,.9)':'rgba(248,245,238,.95)');
+  path.setAttribute('fill','#fff');
   path.setAttribute('stroke','#1a1a1a');
   path.setAttribute('stroke-width',type==='shout'?'2.4':'1.6');
   if(dark) path.setAttribute('stroke-dasharray','5 3');
@@ -148,7 +153,7 @@ function bubbleSvg(type, seed){
   if(type==='normal'){ // しっぽ(左下向き)
     const tail=document.createElementNS(NS,'path');
     tail.setAttribute('d','M30 88 Q20 99 8 104 Q19 96 22 84 Z');
-    tail.setAttribute('fill','rgba(248,245,238,.95)');
+    tail.setAttribute('fill','#fff');
     tail.setAttribute('stroke','#1a1a1a');
     tail.setAttribute('stroke-width','1.6');
     tail.setAttribute('stroke-linejoin','round');
@@ -263,6 +268,25 @@ for(const [id,m] of [['mSpread','spread'],['mSingle','single'],['mSheet','sheet'
   document.getElementById(id).onclick=()=>{mode=m;setBtns();render();};
 }
 document.getElementById('mDlg').onclick=()=>{showDlg=!showDlg;setBtns();render();};
+
+// セリフの書体・文字サイズ切替(localStorageに保存)
+const FONTS={
+  mincho:'"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif',
+  gothic:'"Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP","Noto Sans CJK JP","IPAGothic",sans-serif',
+  maru:'"Hiragino Maru Gothic ProN","HGMaruGothicMPRO","Yu Gothic","Noto Sans JP","IPAGothic",sans-serif',
+  kaku:'"Hiragino Sans W7","Yu Gothic",bold,"Noto Sans JP","IPAGothic",sans-serif'
+};
+const fontSel=document.getElementById('fontSel'), sizeSel=document.getElementById('sizeSel');
+function applyTextStyle(){
+  document.documentElement.style.setProperty('--bubble-font',FONTS[fontSel.value]||FONTS.mincho);
+  document.documentElement.style.setProperty('--fs',sizeSel.value);
+  localStorage.setItem('bubbleFont',fontSel.value);
+  localStorage.setItem('bubbleSize',sizeSel.value);
+}
+fontSel.value=localStorage.getItem('bubbleFont')||'mincho';
+sizeSel.value=localStorage.getItem('bubbleSize')||'1';
+fontSel.onchange=sizeSel.onchange=applyTextStyle;
+applyTextStyle();
 
 document.getElementById('files').onchange=e=>{
   const fs=[...e.target.files].sort((a,b)=>a.name.localeCompare(b.name,'ja',{numeric:true}));
