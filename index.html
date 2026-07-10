@@ -3,9 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>シートリーダー — おむかえのお願い</title>
-<link rel="preload" as="image" href="sheets/sheet_omukae_01.webp">
-<link rel="preload" as="image" href="sheets/sheet_omukae_02.webp">
+<title>シートリーダー</title>
+<script>
+// 作品プロファイル: ?work= で切替(既定: omukae)。ninja.html からは ninja が指定される
+const WORKS={
+  omukae:{title:'おむかえのお願い', data:'data/omukae_name_sheets.json', prefix:'sheets/sheet_omukae_',
+          theme:{accent:'#7a1f1f',accentDeep:'#3d0f0f',gold:'#9c8a5a'}},
+  ninja: {title:'クリプト忍者',     data:'data/ninja_name_sheets.json',  prefix:'sheets/sheet_ninja_',
+          theme:{accent:'#1f3a5f',accentDeep:'#0c1a2e',gold:'#5aa0c8'}}
+};
+const WORK=WORKS[new URLSearchParams(location.search).get('work')]||WORKS.omukae;
+// シート先頭2枚を先読み
+for(const i of ['01','02']){
+  const l=document.createElement('link');
+  l.rel='preload'; l.as='image'; l.href=`${WORK.prefix}${i}.webp`;
+  document.head.appendChild(l);
+}
+</script>
 <style>
   :root{--ink:#0a0a0c;--paper:#e8e4da;--accent:#7a1f1f;--accent-deep:#3d0f0f;--gold:#9c8a5a;--line:#2c2a26}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -53,7 +67,7 @@
 </head>
 <body>
 <header>
-  <h1>『おむかえのお願い』シートリーダー</h1>
+  <h1 id="ttl">シートリーダー</h1>
   <div class="controls">
     <button id="mSpread" class="active">見開き</button>
     <button id="mSingle">単ページ</button>
@@ -86,6 +100,12 @@
 
 <script>
 const COLS=4, ROWS=4, PPS=COLS*ROWS;
+// 作品プロファイルを反映(タイトル・配色)
+document.getElementById('ttl').textContent=`『${WORK.title}』シートリーダー`;
+document.title=`シートリーダー — ${WORK.title}`;
+for(const [k,v] of Object.entries({'--accent':WORK.theme.accent,'--accent-deep':WORK.theme.accentDeep,'--gold':WORK.theme.gold})){
+  document.documentElement.style.setProperty(k,v);
+}
 let sheets=[];        // 画像URLの配列(1枚=20p)
 let total=0;          // 総ページ数
 let cur=1;            // 現在ページ(1-based)
@@ -344,7 +364,7 @@ document.addEventListener('drop',async e=>{
 });
 (async function init(){
   try{
-    const res=await fetch('data/omukae_name_sheets.json');
+    const res=await fetch(WORK.data);
     if(res.ok) applyNameJson(await res.json());
   }catch(_){/* file://直開き等。セリフ無しで続行 */}
   // sheets/sheet_omukae_01.webp(なければ.png)を並列で自動読込。
@@ -357,7 +377,7 @@ document.addEventListener('drop',async e=>{
     if(found.length&&found.length!==sheets.length){ sheets=found; setTotal(); render(); }
   };
   slots.forEach(async(_,i)=>{
-    const base=`sheets/sheet_omukae_${String(i+1).padStart(2,'0')}`;
+    const base=`${WORK.prefix}${String(i+1).padStart(2,'0')}`;
     let url=null;
     for(const ext of ['webp','png']){
       if(await probe(`${base}.${ext}`)){ url=`${base}.${ext}`; break; }

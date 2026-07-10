@@ -104,14 +104,17 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sheet", type=int, help="このシート番号のみ生成 (1-3)")
     ap.add_argument("--model", default=DEFAULT_MODEL)
+    ap.add_argument("--data", default="omukae_name_sheets.json", help="data/内のネームJSON")
+    ap.add_argument("--chars", default="omukae_characters.json", help="data/内のキャラ設定JSON")
+    ap.add_argument("--prefix", default="sheet_omukae", help="出力ファイル名の接頭辞")
     args = ap.parse_args()
 
     key = os.environ.get("FAL_KEY")
     if not key:
         sys.exit("FAL_KEY 環境変数を設定してください (https://fal.ai/dashboard/keys)")
 
-    name_sheets = load("omukae_name_sheets.json")
-    characters = load("omukae_characters.json")
+    name_sheets = load(args.data)
+    characters = load(args.chars)
     chars = characters["characters"]
     style = characters["style_suffix"]
 
@@ -138,7 +141,7 @@ def main():
                     raise
                 time.sleep(10)
         img = Image.open(io.BytesIO(raw)).convert("L")
-        out_path = os.path.join(ROOT, "sheets", f"sheet_omukae_{n:02d}.png")
+        out_path = os.path.join(ROOT, "sheets", f"{args.prefix}_{n:02d}.png")
         img.save(out_path)
         # リーダーが優先的に読む軽量版(約1/5サイズ)
         img.save(out_path[:-4] + ".webp", "WEBP", quality=82, method=6)

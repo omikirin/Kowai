@@ -31,3 +31,16 @@ FAL_KEY=xxxx python3 scripts/generate_sheets.py --model fal-ai/nano-banana-pro
 ```
 
 ページ番号 n のクロップ規則: `col = 3 - ((n-1) % 4)`, `row = floor((n-1) / 4)`(仕様は `data/sheet_reader_spec.json`)。
+
+## クリプト忍者版リーダー
+
+`ninja.html`(= `index.html?work=ninja`)がクリプト忍者用のリーダー。藍色テーマで、
+`sheets/sheet_ninja_01.webp(.png)…` と `data/ninja_name_sheets.json` を自動読込する。
+ファイルを置くまでは空の状態なので、シート画像とネームJSONをドラッグ&ドロップしても読める。
+
+シート生成は同じスクリプトで作品を差し替えられる:
+
+```sh
+FAL_KEY=xxxx python3 scripts/generate_sheets.py \
+  --data ninja_name_sheets.json --chars ninja_characters.json --prefix sheet_ninja
+```
