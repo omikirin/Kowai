@@ -24,14 +24,15 @@
   .page.blank{background:#050505;box-shadow:none}
   /* セリフオーバーレイ */
   .dlg{position:absolute;left:0;right:0;padding:3px 6px;display:flex;flex-direction:row-reverse;justify-content:flex-start;align-items:flex-start;gap:5px;z-index:2;pointer-events:none}
-  .dlg .bubble{height:auto;max-height:100%;overflow:hidden}
-  .bubble{writing-mode:vertical-rl;text-orientation:mixed;max-height:100%;background:rgba(245,242,235,.94);color:#111;border:1.5px solid #222;border-radius:48% / 14%;padding:10px 5px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif;font-size:clamp(10px,1.9vh,17px);line-height:1.35;letter-spacing:.06em;box-shadow:0 1px 5px rgba(0,0,0,.55)}
+  .dlg .bubble{height:auto;max-height:100%}
+  .bubble{position:relative;writing-mode:vertical-rl;text-orientation:mixed;color:#111;padding:14px 9px;font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP","Noto Serif CJK JP","IPAexMincho","IPAGothic",serif;font-size:clamp(10px,1.9vh,17px);line-height:1.35;letter-spacing:.06em;filter:drop-shadow(0 1px 3px rgba(0,0,0,.6))}
+  .bubble>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:-1}
   .bubble .sp{display:block;color:var(--accent);font-size:.65em;margin-bottom:.5em}
-  .bubble.title{background:transparent;color:#f2ede2;border:none;border-radius:0;font-size:clamp(15px,3vh,28px);font-weight:700;letter-spacing:.25em;text-shadow:0 0 8px #000,0 0 3px #000;box-shadow:none}
-  .bubble.caption_small,.bubble.caption{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(10,10,12,.82);color:#ddd6c8;border-color:#555;font-size:clamp(9px,1.4vh,13px);padding:3px 8px}
-  .bubble.document{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(9px,1.45vh,13px);padding:3px 8px}
-  .bubble.mono,.bubble.whisper{background:rgba(20,18,20,.88);color:#cfc6b4;border-color:#666;border-radius:6px}
-  .bubble.shout{font-weight:700;border-width:2px}
+  .bubble.title{padding:4px;color:#f2ede2;font-size:clamp(15px,3vh,28px);font-weight:700;letter-spacing:.25em;text-shadow:0 0 8px #000,0 0 3px #000;filter:none}
+  .bubble.caption_small,.bubble.caption{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(10,10,12,.82);color:#ddd6c8;border:1px solid #555;font-size:clamp(9px,1.4vh,13px);padding:3px 8px;filter:none}
+  .bubble.document{writing-mode:horizontal-tb;max-width:88%;border-radius:4px;background:rgba(235,231,220,.95);border:1px solid #777;font-size:clamp(9px,1.45vh,13px);padding:3px 8px;filter:none}
+  .bubble.mono,.bubble.whisper{color:#333;font-style:normal}
+  .bubble.shout{font-weight:700;padding:18px 13px}
   .sfx{position:absolute;right:4px;color:#f2ede2;font-weight:700;font-size:clamp(9px,1.6vh,15px);writing-mode:vertical-rl;text-shadow:0 0 6px #000,0 0 2px #000;z-index:2;pointer-events:none;letter-spacing:.1em}
   /* 20p一覧 */
   .sheetview{display:none;height:100%;max-width:100%;aspect-ratio:2688/4736}
@@ -88,6 +89,74 @@ function paint(el,n){
   el.style.backgroundSize=`${COLS*100}% ${ROWS*100}%`;
   el.style.backgroundPosition=`${col/(COLS-1)*100}% ${row/(ROWS-1)*100}%`;
 }
+// 手描き風の吹き出しSVGを生成(type: normal=波打つ楕円+しっぽ, shout=トゲトゲ, mono/whisper=雲形)
+function bubbleSvg(type, seed){
+  const NS='http://www.w3.org/2000/svg';
+  const svg=document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 100 100');
+  svg.setAttribute('preserveAspectRatio','none');
+  const rnd=(i)=>{const x=Math.sin(seed*127.1+i*311.7)*43758.5453;return x-Math.floor(x);};
+  const cx=50,cy=50;
+  let d='';
+  if(type==='shout'){
+    const n=22,pts=[];
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2;
+      const spike=(i%2?34:50)+rnd(i)*10;
+      pts.push([cx+Math.cos(a)*spike,cy+Math.sin(a)*spike*1.02]);
+    }
+    d='M'+pts.map(p=>p[0].toFixed(1)+' '+p[1].toFixed(1)).join('L')+'Z';
+  }else if(type==='mono'||type==='whisper'){
+    const n=14,pts=[];
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2;
+      pts.push([cx+Math.cos(a)*46,cy+Math.sin(a)*47]);
+    }
+    d='M'+pts[0][0].toFixed(1)+' '+pts[0][1].toFixed(1);
+    for(let i=0;i<n;i++){ // 外向きの円弧を連ねて雲形に
+      const p=pts[i],q=pts[(i+1)%n];
+      const mx=(p[0]+q[0])/2,my=(p[1]+q[1])/2;
+      const ox=(mx-cx)*.34,oy=(my-cy)*.34;
+      d+=`Q${(mx+ox).toFixed(1)} ${(my+oy).toFixed(1)} ${q[0].toFixed(1)} ${q[1].toFixed(1)}`;
+    }
+    d+='Z';
+  }else{ // normal: 半径を揺らした楕円をなめらかに
+    const n=16,pts=[];
+    for(let i=0;i<n;i++){
+      const a=i/n*Math.PI*2-Math.PI/2;
+      const r=47+(rnd(i)-.5)*6;
+      pts.push([cx+Math.cos(a)*r,cy+Math.sin(a)*r*1.04]);
+    }
+    const mid=(p,q)=>[(p[0]+q[0])/2,(p[1]+q[1])/2];
+    let m=mid(pts[n-1],pts[0]);
+    d='M'+m[0].toFixed(1)+' '+m[1].toFixed(1);
+    for(let i=0;i<n;i++){
+      const p=pts[i],q=pts[(i+1)%n],m2=mid(p,q);
+      d+=`Q${p[0].toFixed(1)} ${p[1].toFixed(1)} ${m2[0].toFixed(1)} ${m2[1].toFixed(1)}`;
+    }
+    d+='Z';
+  }
+  const path=document.createElementNS(NS,'path');
+  path.setAttribute('d',d);
+  const dark=(type==='mono'||type==='whisper');
+  path.setAttribute('fill',dark?'rgba(236,232,224,.9)':'rgba(248,245,238,.95)');
+  path.setAttribute('stroke','#1a1a1a');
+  path.setAttribute('stroke-width',type==='shout'?'2.4':'1.6');
+  if(dark) path.setAttribute('stroke-dasharray','5 3');
+  path.setAttribute('vector-effect','non-scaling-stroke');
+  svg.appendChild(path);
+  if(type==='normal'){ // しっぽ(左下向き)
+    const tail=document.createElementNS(NS,'path');
+    tail.setAttribute('d','M30 88 Q20 99 8 104 Q19 96 22 84 Z');
+    tail.setAttribute('fill','rgba(248,245,238,.95)');
+    tail.setAttribute('stroke','#1a1a1a');
+    tail.setAttribute('stroke-width','1.6');
+    tail.setAttribute('stroke-linejoin','round');
+    tail.setAttribute('vector-effect','non-scaling-stroke');
+    svg.appendChild(tail);
+  }
+  return svg;
+}
 // セリフ・SFXをページ要素に重ねる(パネルは縦積み等分と仮定)
 function overlay(el,n){
   const pd=pageData[n]; if(!pd||!showDlg) return;
@@ -98,7 +167,11 @@ function overlay(el,n){
       const box=document.createElement('div'); box.className='dlg';
       box.style.top=top+'%'; box.style.height=(100/cnt)+'%';
       for(const d of pn.dialogue){
-        const b=document.createElement('div'); b.className='bubble '+(d.type||'normal');
+        const type=d.type||'normal';
+        const b=document.createElement('div'); b.className='bubble '+type;
+        if(['normal','shout','mono','whisper'].includes(type)){
+          b.appendChild(bubbleSvg(type==='whisper'?'mono':type, (d.text||'').length+n*7));
+        }
         if(d.type!=='title'&&d.speaker&&!['紙面','タイトル'].includes(d.speaker)){
           const sp=document.createElement('span'); sp.className='sp'; sp.textContent=d.speaker; b.appendChild(sp);
         }
