@@ -140,6 +140,8 @@ def main():
         img = Image.open(io.BytesIO(raw)).convert("L")
         out_path = os.path.join(ROOT, "sheets", f"sheet_omukae_{n:02d}.png")
         img.save(out_path)
+        # リーダーが優先的に読む軽量版(約1/5サイズ)
+        img.save(out_path[:-4] + ".webp", "WEBP", quality=82, method=6)
         print(f"[sheet {n}] saved -> {out_path} ({img.size[0]}x{img.size[1]})")
 
 

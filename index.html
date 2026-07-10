@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>シートリーダー — おむかえのお願い</title>
+<link rel="preload" as="image" href="sheets/sheet_omukae_01.webp">
+<link rel="preload" as="image" href="sheets/sheet_omukae_02.webp">
 <style>
   :root{--ink:#0a0a0c;--paper:#e8e4da;--accent:#7a1f1f;--accent-deep:#3d0f0f;--gold:#9c8a5a;--line:#2c2a26}
   *{margin:0;padding:0;box-sizing:border-box}
@@ -324,15 +326,23 @@ let lastSheetPages=null, expectedSheets=null;
       document.title='シートリーダー — '+(nm.title||document.title);
     }
   }catch(_){/* file://直開き等。セリフ無しで続行 */}
-  // sheets/sheet_omukae_01.png … を連番で自動読込
-  const found=[];
-  for(let i=1;i<=99;i++){
-    const url=`sheets/sheet_omukae_${String(i).padStart(2,'0')}.png`;
-    const ok=await new Promise(r=>{const im=new Image();im.onload=()=>r(true);im.onerror=()=>r(false);im.src=url;});
-    if(!ok) break;
-    found.push(url);
-  }
-  if(found.length){ sheets=found; setTotal(); render(); }
+  // sheets/sheet_omukae_01.webp(なければ.png)を並列で自動読込。
+  // 読めたシートの先頭連続分から順次表示する(全枚数を待たない)
+  const MAX=12, slots=new Array(MAX).fill(undefined);
+  const probe=url=>new Promise(r=>{const im=new Image();im.onload=()=>r(true);im.onerror=()=>r(false);im.src=url;});
+  const sync=()=>{
+    const found=[];
+    for(const s of slots){ if(typeof s==='string') found.push(s); else break; }
+    if(found.length&&found.length!==sheets.length){ sheets=found; setTotal(); render(); }
+  };
+  slots.forEach(async(_,i)=>{
+    const base=`sheets/sheet_omukae_${String(i+1).padStart(2,'0')}`;
+    let url=null;
+    for(const ext of ['webp','png']){
+      if(await probe(`${base}.${ext}`)){ url=`${base}.${ext}`; break; }
+    }
+    slots[i]=url; sync();
+  });
 })();
 </script>
 </body>
