@@ -7,6 +7,7 @@
 
 - `index.html` — リーダー本体。`sheets/sheet_omukae_01.png…` を自動読込(手動でのファイル選択も可)。
   セリフ・SFXは `data/omukae_name_sheets.json` からページ上にオーバーレイ描画する(「セリフ」ボタンで切替)。
+  別のネームJSONをファイル選択またはドラッグ&ドロップで差し替え可能(画像とJSONの同時ドロップも可)。
 - `data/` — キャラ設定・シート版ネーム・リーダー仕様のJSON。
 - `scripts/generate_sheets.py` — fal.ai でシート3枚を生成(`FAL_KEY` 必須)。
 - `scripts/make_placeholder_sheets.py` — 動作確認用プレースホルダーシートの生成(要 Pillow)。

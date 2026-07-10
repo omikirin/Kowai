@@ -72,6 +72,7 @@
       <option value="1.4">文字 特大</option>
     </select>
     <input type="file" id="files" accept="image/*" multiple title="16pシート画像を章順に選択">
+    <input type="file" id="dlgFile" accept=".json,application/json" title="セリフJSON(ネームJSON)を選択">
   </div>
 </header>
 <main id="main">
@@ -306,25 +307,45 @@ function setTotal(){
   cur=Math.min(cur,total)||1;
 }
 
-// ネームJSON(セリフ)と生成済みシートの自動読込
+// ネームJSON(セリフ)の取り込み。生成に使うネームJSONをそのまま渡せる
 let lastSheetPages=null, expectedSheets=null;
+function applyNameJson(nm){
+  pageData={};
+  let maxPage=0;
+  for(const sh of (nm.sheets||[])){
+    for(const pg of (sh.pages||[])){
+      if(typeof pg.page!=='number') continue; // "49-60"等の空白セル指定
+      pageData[pg.page]={panels:(pg.panels||[]).map(p=>({dialogue:p.dialogue||[],sfx:p.sfx||null}))};
+      maxPage=Math.max(maxPage,pg.page);
+    }
+  }
+  // 総ページ数はネームの最大ページ番号から決める(最終シートの端数対応)
+  lastSheetPages=maxPage?((maxPage-1)%PPS)+1:null;
+  expectedSheets=maxPage?Math.ceil(maxPage/PPS):null;
+  if(nm.title) document.title='シートリーダー — '+nm.title;
+  if(total){ setTotal(); render(); }
+}
+document.getElementById('dlgFile').onchange=async e=>{
+  const f=e.target.files[0]; if(!f) return;
+  try{ applyNameJson(JSON.parse(await f.text())); }
+  catch(err){ alert('JSONを読み込めませんでした: '+err.message); }
+};
+// ドラッグ&ドロップ: 画像=シート差し替え / .json=セリフ差し替え(同時も可)
+document.addEventListener('dragover',e=>e.preventDefault());
+document.addEventListener('drop',async e=>{
+  e.preventDefault();
+  const fs=[...e.dataTransfer.files];
+  const imgs=fs.filter(f=>f.type.startsWith('image/'))
+               .sort((a,b)=>a.name.localeCompare(b.name,'ja',{numeric:true}));
+  const json=fs.find(f=>f.name.endsWith('.json'));
+  if(json){ try{ applyNameJson(JSON.parse(await json.text())); }catch(err){ alert('JSONを読み込めませんでした: '+err.message); } }
+  if(imgs.length){ sheets=imgs.map(f=>URL.createObjectURL(f)); cur=1; setTotal(); }
+  if(json||imgs.length) render();
+});
 (async function init(){
   try{
     const res=await fetch('data/omukae_name_sheets.json');
-    if(res.ok){
-      const nm=await res.json();
-      expectedSheets=nm.format?.sheets_total??null;
-      let maxPage=0;
-      for(const sh of nm.sheets){
-        for(const pg of sh.pages){
-          if(typeof pg.page!=='number') continue; // "49-60"等の空白セル指定
-          pageData[pg.page]={panels:pg.panels.map(p=>({dialogue:p.dialogue||[],sfx:p.sfx||null}))};
-          maxPage=Math.max(maxPage,pg.page);
-        }
-      }
-      if(expectedSheets) lastSheetPages=maxPage-(expectedSheets-1)*PPS;
-      document.title='シートリーダー — '+(nm.title||document.title);
-    }
+    if(res.ok) applyNameJson(await res.json());
   }catch(_){/* file://直開き等。セリフ無しで続行 */}
   // sheets/sheet_omukae_01.webp(なければ.png)を並列で自動読込。
   // 読めたシートの先頭連続分から順次表示する(全枚数を待たない)
